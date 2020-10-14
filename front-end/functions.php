@@ -167,7 +167,7 @@ Class TemplatesWidgets {
 					$fields[$name['name']] = $field;
 					unset($fields[$key_field]);
 					
-					if(count($fieds[$name['name']])>1){
+					if(count($fields[$name['name']])>1){
 						$fields[$name['name']] = TemplatesWidgets::sub_fields($fields[$name['name']]);
 					}
 				}
@@ -185,10 +185,10 @@ Class TemplatesWidgets {
 							}
 						}else{
 							foreach($field as $f_k => $f){
-								if(!empty($field[$sub['key']])){
+								// if(!empty($field[$sub['key']])){
 									$fields[$key_field][$sub['name']] = $field[$sub['key']];
 									unset($fields[$key_field][$sub['key']]);
-								}
+								// }
 							}
 						}
 					}
@@ -236,7 +236,7 @@ Class TemplatesWidgets {
 								}
 								if(!empty($name_fields[$name['name']][$f_key][$sub['key']])){
 									
-									$name_fields[$name['name']][$f_key][$sub['name']] = TemplatesWidgets::sub_fields($name_fields[$name['name']][$f_key][$sub['key']]);
+									$name_fields[$name['name']][$f_key][$sub['name']] = TemplatesWidgets::sub_fields($name_fields[$name['name']][$f_key][$sub['key']], $sub['sub_fields']);
 								}else if(!empty($name_fields[$name['name']][$sub['key']])){
 									
 									$name_fields[$name['name']][$sub['name']] = TemplatesWidgets::sub_fields($name_fields[$name['name']][$sub['key']], $sub['sub_fields']);

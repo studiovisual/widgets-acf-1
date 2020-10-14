@@ -166,36 +166,37 @@
 #widget_acf_box_light {
 	position: fixed;
 	top: 0;
-	left: 0;
+	left: -1px;
 	width: 100%;
 	height: 100%; 
 	background: rgba(0,0,0,0.6);
-	z-index: 99;
+	z-index: 9999;
 	border:1px #ddd solid;
 }
 
 #widget_acf_box_light .acf_box_widgets_content {
 	position: relative;
 	display: block;
-	margin:30px;
 	padding:15px;
-	width: 800px;
-	left: 23%;
-	top: 15px;
-	height: 450px;
+	width: 80%;
+	left: 50%;
+	top: 50%;
+	height: 84vh;
 	background: rgba(255,255,255,1);
 	border-radius: 5px;
 	padding-top: 70px;
 	overflow-y: scroll;
 	overflow-x: hidden;
+	transform: translate(-50%, -50%);
+	max-width: 1500px;
 }
 
 #widget_acf_box_light .acf_box_widgets_content .fixed_box_light {
 	position: fixed;
 	z-index: 999;
 	background: #fff;
-	width: 795px;
-	top: 50px;
+	width: calc(100% - 30px);
+	top: 0;
 	height: 50px;
 }
 
