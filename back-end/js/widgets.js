@@ -359,7 +359,7 @@ function set_widget_light_box(){
 
     });
 
-    jQuery('.acf_box_widgets_content').find('input[type="checkbox"]').change(function(){
+    jQuery('.acf_box_widgets_content').find('input[type="checkbox"]:not(.acf-switch-input)').change(function(){
 
       if(jQuery(this).attr("checked")){
 
@@ -368,6 +368,23 @@ function set_widget_light_box(){
         
         jQuery(this).removeAttr("checked");
       }
+    });
+
+    jQuery('.acf_box_widgets_content').find('input[type="checkbox"].acf-switch-input').each(function(){
+      var parentCheck = jQuery(this).parent();
+
+      parentCheck.change(function(){
+        var check = jQuery(this).find('input');
+        console.log(jQuery(this).find('.acf-switch'));
+
+        if(jQuery(this).find('.acf-switch').hasClass('-focus') && !jQuery(this).find('.acf-switch').hasClass('-on')) {
+          check.attr('checked','checked');
+          jQuery(this).find('.acf-switch').addClass('-on');
+        } else if (jQuery(this).find('.acf-switch').hasClass('-on')){
+          check.removeAttr("checked");
+          jQuery(this).find('.acf-switch').removeClass('-on');
+        }
+      });
     });
 
     jQuery('.acf_box_widgets_content').find('input[type="radio"]').change(function(){
