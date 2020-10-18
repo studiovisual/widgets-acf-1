@@ -21,33 +21,6 @@ class WidgetsACF {
 		add_action('acf/init', array($this, 'includes'), 99);
 		add_action('acf/init', array($this, 'initialize'), 100);
 	}
-	
-	public function start(){
-		
-		$screen = $_GET['page'];
-		if (strpos($screen, "options-todos-os-widgets") == true) {
-			
-			require("back-end/acf/fields_code_external.php");
-			if($_GET['export']){
-				$location = new WidgetsLocation;
-				$location->export_zip($_GET['export']);
-			}
-			
-			if($_GET['del_group_field']){
-				
-				$post = get_post($_GET['del_group_field']);
-				
-				if($post->post_type="acf-field-group"){
-					
-					$groups = acf_get_field_groups();
-					
-					$json = [];
-					
-					foreach ($groups as $key => $group) {
-						
-						if($_GET['del_group_field']==$group['ID']){
-							
-							$widget_location = $group['location'][0][0]['value'];
 
 	public function enqueue() {
 		wp_enqueue_script('widgets-ckeditor-js', plugins_url('back-end/assets/js/ckeditor/ckeditor.js', __FILE__));
