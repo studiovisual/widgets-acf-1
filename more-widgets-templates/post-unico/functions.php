@@ -1,5 +1,12 @@
 <?php
 
+/*
+    Title: Post único
+    Description: Exibe um post único definido
+    Category: Post
+    Keywords: post single
+*/
+
 if ( !class_exists('post_unico_widgets_acf') ){
 
 	Class post_unico_widgets_acf {

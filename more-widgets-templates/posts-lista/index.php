@@ -1,6 +1,5 @@
-<?php // var_dump($fields); ?>
 <div class="row">
-	<?php foreach ($fields['field_select_posts_lista_key'] as $key => $post): ?>
+	<?php foreach ($widget->fields['field_select_posts_lista_key'] as $key => $post): ?>
 		<?php $post = get_post($post); ?>
 		<div class="col-sm-12">
 			<div class="col-sm-4">

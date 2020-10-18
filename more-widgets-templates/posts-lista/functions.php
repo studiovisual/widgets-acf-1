@@ -1,5 +1,11 @@
 <?php
 
+/*
+    Title: Múltiplos posts
+    Description: Exibe uma lista de posts
+    Category: Post
+    Keywords: post multiple
+*/
 
 if ( !class_exists('post_lista_widgets_acf') ){
 

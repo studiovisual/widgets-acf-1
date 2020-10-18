@@ -1,5 +1,12 @@
 <?php
 
+/*
+    Title: Widget customizado
+    Description: 
+    Category: Custom
+    Keywords: custom
+*/
+
 $fields['icon'] = 'fa fa-picture-o';
 
 $fields['image']['label'] = 'Imagem destacada';
