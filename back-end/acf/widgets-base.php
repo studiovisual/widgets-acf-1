@@ -2,30 +2,19 @@
 Class AcfWidget {
 
 	static function get_base(){
+		include_once('fields-layout-settings.php');
 
-		include "fields_layout_settings.php";
-
-		$base_fields = array (
+		$base_fields = array(
 			'key' => 'group_widgets_acf',
 			'title' => 'Widgets',
-			'fields' => array (
-				array (
-					'key' => 'field_linha_widgets',
+			'fields' => array(
+				array(
+					'key' => 'widgets',
 					'label' => 'Layout de widgets',
-					'name' => 'linha-widgets',
+					'name' => 'widgets',
 					'type' => 'repeater',
-					'instructions' => '',
-					'required' => 0,
-					'conditional_logic' => 0,
-					'wrapper' => array (
-						'width' => '',
-						'class' => '',
-						'id' => '',
-						),
-					'collapsed' => '',
 					'min' => 1,
-					'max' => 0,
-					'layout' => 'row',
+					'layout' => 'block',
 					'button_label' => 'Adicionar Layout',
 					'sub_fields' => array (
 						array(
@@ -60,29 +49,20 @@ Class AcfWidget {
 							// 'layout' => 'vertical',
 							// 'return_format' => 'value',
 							),
-						1=>array(),
-						1.5=> $fields_layout_settings,
-						2=>array (
-							'key' => 'field_the_contents',
+						1 => array(),
+						1.5 => $fields_layout_settings,
+						2 => array (
+							'key' => 'widgets_contents',
 							'label' => 'Seleção de conteudo',
-							'name' => 'select-the-contents',
+							'name' => 'widgets_contents',
 							'type' => 'flexible_content',
 							'instructions' => 'Insira, pegue e arraste os widgets selecinados.',
-							'required' => 0,
-							'conditional_logic' => 0,
-							'wrapper' => array (
-								'width' => '',
-								'class' => '',
-								'id' => '',
-								),
 							'button_label' => '<span class="dashicons dashicons-plus-alt2 acf-js-tooltip" title="Adicionar Widget"></span>',
-							'min' => '',
-							'max' => '',
 							'layouts' => array (),//Layout widgets
-							),
 						),
-					)
-				),
+					),
+				)
+			),
 			'location' => array (),
 			'menu_order' => 0,
 			'position' => 'acf_after_title',
@@ -91,10 +71,10 @@ Class AcfWidget {
 			'instruction_placement' => 'label',
 			'hide_on_screen' => array (
 				0 => 'the_content'
-				),
+			),
 			'active' => 1,
 			'description' => '',
-			);
+		);
 
 		return $base_fields;
 	}
