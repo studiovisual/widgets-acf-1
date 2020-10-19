@@ -530,3 +530,11 @@ input.widgets-acf-flexible-control-title{
 	font-size: 13px;
 	transform: translateY(3px);
 }
+
+.cke_reset_all table {
+	z-index: 1000000000000 !important;
+}
+
+.cke_dialog_background_cover {
+	z-index: 1000000 !important;
+}
