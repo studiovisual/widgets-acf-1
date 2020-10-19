@@ -114,9 +114,7 @@
                     model.setCkeditorInline($layout, 'ck_repeat');
                 });
             },
-            onClose: function() {
-                flexible.closeLayout($layout);
-                
+            onClose: function() {                
                 $(document).off('click', '.acf-field-widgets a[data-event="add-row"]', model.setCkeditorInline($layout, 'ck_repeat'));
             }
         });
