@@ -248,13 +248,13 @@ class Widget extends acf_field_flexible_content {
         foreach($sub_fields as $sub_field):
             switch($sub_field['name']):
                 case 'columns_mobile':
-                    $div['data-columns-mobile'] = !empty($sub_field['value']) ? $sub_field['value'] : $sub_field['default_value'];
+                    $div['data-columns-mobile'] = !empty($value['field_grid_columns_mobile_' . $layout['key']]) ? $value['field_grid_columns_mobile_' . $layout['key']] : $sub_field['default_value'];
                     break;
                 case 'columns_tablet':
-                    $div['data-columns-tablet'] = !empty($sub_field['value']) ? $sub_field['value'] : $sub_field['default_value'];
+                    $div['data-columns-tablet'] = !empty($value['field_grid_columns_tablet_' . $layout['key']]) ? $value['field_grid_columns_tablet_' . $layout['key']] : $sub_field['default_value'];
                     break;
                 case 'columns_desktop':
-                    $div['data-columns-desktop'] = !empty($sub_field['value']) ? $sub_field['value'] : $sub_field['default_value'];
+                    $div['data-columns-desktop'] = !empty($value['field_grid_columns_desktop_' . $layout['key']]) ? $value['field_grid_columns_desktop_' . $layout['key']] : $sub_field['default_value'];
                     break;
             endswitch;
         endforeach;
