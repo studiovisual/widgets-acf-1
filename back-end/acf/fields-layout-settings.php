@@ -224,7 +224,7 @@ $fields_layout_settings = array(
 					'key' => 'layout_align_horizontal',
 					'label' => 'Horizontal',
 					'name' => 'horizontal',
-					'type' => 'radio',
+					'type' => 'button_group',
 					'layout' => 'horizontal',
 					'choices' => array(
 						'start' => 'Inicial',
@@ -235,6 +235,7 @@ $fields_layout_settings = array(
 					),
 					'default_value' => 'start',
 					'wrapper' => array(
+						'class' => 'widget-layout-horizontal',
 						'width' => 50,
 					),
 				),
@@ -242,7 +243,7 @@ $fields_layout_settings = array(
 					'key' => 'layout_align_vertical',
 					'label' => 'Vertical',
 					'name' => 'vertical',
-					'type' => 'radio',
+					'type' => 'button_group',
 					'layout' => 'horizontal',
 					'choices' => array(
 						'stretch' => 'Estendido',
@@ -252,6 +253,7 @@ $fields_layout_settings = array(
 					),
 					'default_value' => 'stretch',
 					'wrapper' => array(
+						'class' => 'widget-layout-vertical',
 						'width' => 50,
 					),
 				),

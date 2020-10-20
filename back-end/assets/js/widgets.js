@@ -678,6 +678,17 @@
     });
     $(document).on('input', '[data-action="search"]', model.search);
     $(document).on('click', '[data-name="settings-layout"]', model.modalSettings);
+    
+    
+
+    $(document).on('click', '.widget-layout-horizontal input', function() {
+        var $element = $(this);
+        $element.closest('td.acf-fields').find('.values').attr('data-align-horizontal', $element.val());
+    });
+    $(document).on('click', '.widget-layout-vertical input', function() {
+        var $element = $(this);
+        $element.closest('td.acf-fields').find('.values').attr('data-align-vertical', $element.val());
+    });
     $(document).on('change', '.grid-widget-settings--desktop select', function() {
         var $element = $(this);
         $element.closest('.layout').attr('data-columns-desktop', $element.val());

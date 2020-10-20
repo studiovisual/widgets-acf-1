@@ -145,6 +145,12 @@ class Widget extends acf_field_flexible_content {
         $no_value_message = __('Click the "%s" button below to start creating your layout', 'acf');
         $no_value_message = apply_filters('acf/fields/flexible_content/no_value_message', $no_value_message, $field);
 
+        $settings = get_field('layout_settings');
+        $div_values = array(
+            'class'		=> 'values',
+            'data-align-horizontal'	=> $settings['align']['horizontal'],
+            'data-align-vertical'	=> $settings['align']['vertical'],
+        );
     ?>
     <div <?php acf_esc_attr_e( $div ); ?>>
         <?php acf_hidden_input(array('name' => $field['name'])); ?>
@@ -158,8 +164,9 @@ class Widget extends acf_field_flexible_content {
                 $this->render_layout($field, $layout, 'acfcloneindex', array());
             endforeach; ?>
         </div>
+        
 
-        <div class="values">
+        <div <?php acf_esc_attr_e( $div_values ); ?>>
             <?php if(!empty($field['value'])): 
                 foreach($field['value'] as $i => $value):
                     // validate

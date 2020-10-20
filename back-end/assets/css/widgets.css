@@ -19,7 +19,6 @@
 }
 .acf-field-widgets .acf-flexible-content .layout {
 	margin: 12px !important;
-	float: left;
 }
 
 .acf-field-widgets  .acf-flexible-content .layout .acf-fc-layout-handle {
@@ -263,6 +262,8 @@
 .acf-flexible-content .ui-sortable {
 	margin-left: -12px !important;
 	margin-right: -12px !important;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 /* Add widgets */
@@ -543,4 +544,40 @@ input.widgets-acf-flexible-control-title{
 
 .cke_dialog_background_cover {
 	z-index: 1000000 !important;
+}
+
+.acf-flexible-content .ui-sortable[data-align-horizontal="start"] {
+	justify-content: flex-start;
+}
+
+.acf-flexible-content .ui-sortable[data-align-horizontal="center"] {
+	justify-content: center;
+}
+
+.acf-flexible-content .ui-sortable[data-align-horizontal="end"] {
+	justify-content: flex-end;
+}
+
+.acf-flexible-content .ui-sortable[data-align-horizontal="between"] {
+	justify-content: space-between;
+}
+
+.acf-flexible-content .ui-sortable[data-align-horizontal="around"] {
+	justify-content: space-around;
+}
+
+.acf-flexible-content .ui-sortable[data-align-vertical="stretch"] {
+	align-items: stretch;
+}
+
+.acf-flexible-content .ui-sortable[data-align-vertical="start"] {
+	align-items: flex-start;
+}
+
+.acf-flexible-content .ui-sortable[data-align-vertical="center"] {
+	align-items: center;
+}
+
+.acf-flexible-content .ui-sortable[data-align-vertical="end"] {
+	align-items: flex-end;
 }
