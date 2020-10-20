@@ -83,6 +83,7 @@
 	background: transparent;
 	font-size: 18px;
 	padding: 0;
+	display: flex;
 }
 
 .acf-field-widgets .acf-flexible-content .values .layout .acf-fc-layout-handle::after {
@@ -98,12 +99,13 @@
 
 .acf-field-widgets .acf-flexible-content .values .layout .widgets-acf-fc-placeholder {
 	display: flex;
-	height: 100%;
+	height: calc(100% - 36px);
 	padding: 0;
 	width: 100%;
 	background-size: contain;
 	background-position: center center;
 	background-repeat: no-repeat;
+	margin-top: 36px;
 }
 
 .acf-field-widgets .acf-flexible-content .values .layout.-collapsed .widgets-acf-fc-placeholder {
@@ -224,8 +226,9 @@
 
 .acf-field-widgets .acf-flexible-content .values .layout .acf-fc-layout-order {
 	margin-left: 8px;
+	margin-right: 6px;
 	position: relative;
-	transform: translateY(3px);
+	transform: translateY(8px);
 	z-index: 1;
 }
 
@@ -372,8 +375,11 @@ input.widgets-acf-flexible-control-title{
     cursor: text;
 	position: relative;
 	z-index: 100;
-	display: inline-flex;
 	transform: translateY(5px);
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	align-self: flex-start;
 }
 
 .layout > .acf-fc-layout-handle .widgets-acf-layout-title .widgets-acf-flexible-control-title {
