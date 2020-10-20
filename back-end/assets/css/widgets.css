@@ -223,7 +223,7 @@
 	width: 30px !important;
 }
 
-.acf-field-widgets .acf-flexible-content .values .layout .acf-fc-layout-order {
+.acf-field-widgets .acf-flexible-content .values .layout .acf-fc-layout-handle .acf-fc-layout-order {
 	margin-left: 8px;
 	margin-right: 6px;
 	position: relative;
@@ -259,7 +259,7 @@
 	margin-left: 10px;
 }
 
-.acf-flexible-content .ui-sortable {
+.acf-flexible-content .values {
 	margin-left: -12px !important;
 	margin-right: -12px !important;
 	display: flex;
@@ -546,38 +546,38 @@ input.widgets-acf-flexible-control-title{
 	z-index: 1000000 !important;
 }
 
-.acf-flexible-content .ui-sortable[data-align-horizontal="start"] {
+.acf-flexible-content .values[data-align-horizontal="start"] {
 	justify-content: flex-start;
 }
 
-.acf-flexible-content .ui-sortable[data-align-horizontal="center"] {
+.acf-flexible-content .values[data-align-horizontal="center"] {
 	justify-content: center;
 }
 
-.acf-flexible-content .ui-sortable[data-align-horizontal="end"] {
+.acf-flexible-content .values[data-align-horizontal="end"] {
 	justify-content: flex-end;
 }
 
-.acf-flexible-content .ui-sortable[data-align-horizontal="between"] {
+.acf-flexible-content .values[data-align-horizontal="between"] {
 	justify-content: space-between;
 }
 
-.acf-flexible-content .ui-sortable[data-align-horizontal="around"] {
+.acf-flexible-content .values[data-align-horizontal="around"] {
 	justify-content: space-around;
 }
 
-.acf-flexible-content .ui-sortable[data-align-vertical="stretch"] {
+.acf-flexible-content .values[data-align-vertical="stretch"] {
 	align-items: stretch;
 }
 
-.acf-flexible-content .ui-sortable[data-align-vertical="start"] {
+.acf-flexible-content .values[data-align-vertical="start"] {
 	align-items: flex-start;
 }
 
-.acf-flexible-content .ui-sortable[data-align-vertical="center"] {
+.acf-flexible-content .values[data-align-vertical="center"] {
 	align-items: center;
 }
 
-.acf-flexible-content .ui-sortable[data-align-vertical="end"] {
+.acf-flexible-content .values[data-align-vertical="end"] {
 	align-items: flex-end;
 }
