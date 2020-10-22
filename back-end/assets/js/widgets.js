@@ -19,6 +19,18 @@
         if($layout.hasClass('widgets-acf-flexible-title-edition'))
             $layout.find('> .acf-fc-layout-handle > .widgets-acf-layout-title > input.widgets-acf-flexible-control-title').trigger('blur');
     }
+
+    model.events['mouseenter .acf-fc-layout-handle'] = 'layoutMouseOver';
+    model.events['mouseenter .acf-fc-layout-controls'] = 'layoutMouseOver';
+    model.layoutMouseOver = function(e, $el) {
+        $el.closest('.layout').addClass('layout--hover');
+    }
+
+    model.events['mouseleave .acf-fc-layout-handle'] = 'layoutMouseOut';
+    model.events['mouseleave .acf-fc-layout-controls'] = 'layoutMouseOut';
+    model.layoutMouseOut = function(e, $el) {
+        $el.closest('.layout').removeClass('layout--hover');
+    }
     
     model.events['click .widgets-acf-layout-title-text'] = 'editLayoutTitle';
     model.editLayoutTitle = function(e, $el) {
@@ -494,68 +506,75 @@
         // }
         // else {
             var toolbarText = [
-                [
-                    'RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike',
-                    'Anchor', 'Font','FontSize', 'Link', 'TextColor', 'BGColor',
-                    'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'
-                ]
+                [ 'RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike' ],
+                [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
+                [ 'Link', 'Unlink' ], 
+                // [ 'EmojiPanel' ],
+                [ /*'Font',*/ 'FontSize', 'lineheight', 'LetterSpacing' ],
+                [ 'TextColor', 'BGColor' ],
+                // [ 'TransformTextToLowercase', 'TransformTextToUppercase', 'TransformTextCapitalize' ]
             ];
             var toolbarTextArea = [
-                [
-                    'RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike',
-                    'Anchor', 'Font','FontSize', 'Link', 'TextColor', 'BGColor',
-                    'NumberedList', 'BulletedList', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'
-                ]
+                [ 'RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike' ],
+                [ 'NumberedList', 'BulletedList', 'Blockquote' ],
+                [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
+                [ 'Link', 'Unlink' ], 
+                [ 'HorizontalRule', /*'EmojiPanel'*/ ],
+                [ /*'Font',*/ 'FontSize', 'lineheight', 'letterspacing' ],
+                [ 'TextColor', 'BGColor' ],
+                // [ 'TransformTextToLowercase', 'TransformTextToUppercase', 'TransformTextCapitalize' ]
             ];
         // }
         
-        if(class_repeat != null) {
-            class_use_ckeditor = class_use_ckeditor + ' ' + class_repeat + '_ck_repeat';
-            find_use_ck_editor = class_repeat + '_ck_repeat';
-        }
+        // if(class_repeat != null) {
+        //     class_use_ckeditor = class_use_ckeditor + ' ' + class_repeat + '_ck_repeat';
+        //     find_use_ck_editor = class_repeat + '_ck_repeat';
+        // }
         
-        setTimeout(function() {
+        // setTimeout(function() {
             $layout.find('textarea:not(.editor-initialized), input[type="text"]:not(.wp-color-picker):not(.widgets-acf-flexible-control-title):not(.editor-initialized)').each(function() {
-                if(!jQuery(this).closest('.acf-color-picker')[0] && !jQuery(this).closest('.acf-clone')[0]) {
+                // if(!jQuery(this).closest('.acf-color-picker')[0] && !jQuery(this).closest('.acf-clone')[0]) {
                     var $input = $(this);
                     var id_div = $input.attr('name') + (new Date().getTime());
                     var isTextInput = $input.attr('type') == 'text';
             
                     $input.addClass('editor-initialized');
 
-                    $('<div id="' + id_div + '" class="' + class_use_ckeditor + (isTextInput ? ' ckeditor_inline_input_text' : '') + '" contenteditable="true" >' + $input.val() + '</div>')
+                    var div_editor = $('<div id="' + id_div + '" class="' + class_use_ckeditor + (isTextInput ? ' ckeditor_inline_input_text' : '') + '" contenteditable="true" >' + $input.val() + '</div>')
                         .appendTo($input.parent());
-                    var editor;
-                    var toolbar = isTextInput ? toolbarText : toolbarTextArea;
 
-                    CKEDITOR.disableAutoInline = true;
-        
-                    // if(styleset_var) {
-                    //     editor = CKEDITOR.inline(id_div + '_editor', {
-                    //         enterMode : CKEDITOR.ENTER_BR,
-                    //         autoParagraph : true,
-                    //         forcePasteAsPlainText: true,
-                    //         stylesSet : styleset_var,
-                    //         font_names : jQuery('#fonts_selected_widget_acf').val(),
-                    //         toolbar: toolbar
-                    //     });
-                    // }
-                    // else{
-                        editor = CKEDITOR.inline(id_div, {
-                            enterMode : CKEDITOR.ENTER_BR,
-                            autoParagraph : true,
-                            forcePasteAsPlainText: true,
-                            font_names : jQuery('#fonts_selected_widget_acf').val(),
-                            toolbar: toolbar
+                    // div_editor.one('click', function() {
+                        var editor;
+
+                        CKEDITOR.disableAutoInline = true;
+            
+                        // if(styleset_var) {
+                        //     editor = CKEDITOR.inline(id_div + '_editor', {
+                        //         enterMode : CKEDITOR.ENTER_BR,
+                        //         autoParagraph : true,
+                        //         forcePasteAsPlainText: true,
+                        //         stylesSet : styleset_var,
+                        //         font_names : jQuery('#fonts_selected_widget_acf').val(),
+                        //         toolbar: toolbar
+                        //     });
+                        // }
+                        // else{
+                            editor = CKEDITOR.inline(id_div, {
+                                enterMode: CKEDITOR.ENTER_BR,
+                                autoParagraph: true,
+                                forcePasteAsPlainText: true,
+                                font_names: jQuery('#fonts_selected_widget_acf').val(),
+                                toolbar: isTextInput ? toolbarText : toolbarTextArea
+                            });
+                        // }
+    
+                        editor.on('change', function() {
+                            $input.val(editor.getData());
                         });
-                    // }
-
-                    editor.on('change', function() {
-                        $input.val(editor.getData());
-                    });
-                }
+                    // });
+                // }
             });
-        }, 100);
+        // }, 100);
     };
 
     model.modalSettings = function(e) {
@@ -682,15 +701,19 @@
     
 
     $(document).on('click', '.widget-layout-horizontal input', function() {
-        var $element = $(this);
-        $element.closest('td.acf-fields').find('.values').attr('data-align-horizontal', $element.val());
+        $element.closest('td.acf-fields').find('.values').attr('data-align-horizontal', $(this).val());
     });
     $(document).on('click', '.widget-layout-vertical input', function() {
-        var $element = $(this);
-        $element.closest('td.acf-fields').find('.values').attr('data-align-vertical', $element.val());
+        $element.closest('td.acf-fields').find('.values').attr('data-align-vertical', $(this).val());
     });
     $(document).on('change', '.grid-widget-settings--desktop select', function() {
-        var $element = $(this);
-        $element.closest('.layout').attr('data-columns-desktop', $element.val());
+        $element.closest('.layout').attr('data-columns-desktop', $(this).val());
+    });
+
+    $(document).on('mouseenter', '.grid-widget-settings', function() {
+        model.layoutMouseOver(null, $(this));
+    });
+    $(document).on('mouseleave', '.grid-widget-settings', function() {
+        model.layoutMouseOut(null, $(this));
     });
 })(jQuery);

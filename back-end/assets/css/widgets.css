@@ -37,7 +37,7 @@
 
 .acf-field-widgets .acf-flexible-content .values .layout .acf-fc-layout-controls {
 	background-color: #23282d !important;
-	left: 99% !important;
+	right: 0 !important;
 	opacity: 0;
 	top: 0 !important;
 	width: 140px;
@@ -50,18 +50,18 @@
 	border-radius: 5px;
 }
 
-.acf-field-widgets .acf-flexible-content .values .layout:hover .acf-fc-layout-controls {
+.acf-field-widgets .acf-flexible-content .values .layout--hover .acf-fc-layout-controls {
 	background-color: #23282d !important;
-	left: 100% !important;
+	right: -140px !important;
 	opacity: 1;
 }
 
-.acf-field-widgets .acf-flexible-content .values .layout:hover .acf-fc-layout-controls .-collapse:hover {
+.acf-field-widgets .acf-flexible-content .values .layout--hover .acf-fc-layout-controls .-collapse:hover {
 	background: #2a9bd9 !important;
 	color: #fff !important;
 }
 
-.acf-field-widgets .acf-flexible-content .values .layout:hover .acf-fc-layout-controls::before {
+.acf-field-widgets .acf-flexible-content .values .layout--hover .acf-fc-layout-controls::before {
     content: "";
     width: 0;
     height: 0;
@@ -127,10 +127,10 @@
 	z-index: 100;
 }
 
-.acf-field-widgets .acf-flexible-content .values .layout:hover .acf-fc-layout-handle  > .widgets-acf-layout-title-text {
+/* .acf-field-widgets .acf-flexible-content .values .layout:hover .acf-fc-layout-handle  > .widgets-acf-layout-title-text {
 	top: -38px;
 	opacity: 1;
-}
+} */
 
 .acf-field-widgets .acf-flexible-content .values .layout .acf-fc-layout-handle  > .widgets-acf-layout-title-text::before {
 	content: "";
@@ -178,7 +178,7 @@
 	display: flex;
 	position: absolute !important;
 	z-index: 9999;
-	top: 95%;
+	bottom: 0;
 	left: 50%;
 	padding: 0 6px !important;
 	width: 110px;
@@ -188,9 +188,9 @@
 	transform: translateX(-50%);
 }
 
-.acf-field-widgets .acf-flexible-content .values .layout:hover .grid-widget-settings {
+.acf-field-widgets .acf-flexible-content .values .layout--hover .grid-widget-settings {
 	opacity: 1;
-	top: 100%;
+	bottom: -40px;
 }
 
 .grid-widget-settings--desktop {
@@ -538,7 +538,7 @@ input.widgets-acf-flexible-control-title{
 	transform: translateY(3px);
 }
 
-.cke_reset_all table {
+.cke_reset_all {
 	z-index: 1000000000000 !important;
 }
 

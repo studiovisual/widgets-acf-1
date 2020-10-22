@@ -31,7 +31,7 @@ Class WidgetTemplate {
 						$widgets[$grid][] = array(
 							'layout' => get_row_layout(), 
 							'content' => get_row(), 
-							'class'=>$class, 
+							'class'=> $class, 
 						);
 					endwhile;
 				endif;

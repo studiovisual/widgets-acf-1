@@ -34,7 +34,7 @@ Class Utils {
 					// 'enqueue_script'    => 'EnqueueScript',
 					// 'enqueue_assets'    => 'EnqueueAssets',
 					]
-					)
+				)
             );
         }
 			
@@ -298,47 +298,6 @@ Class Utils {
 		return $fields_base;
     }
     
-    // public static function setFields($widget, $fields) {
-	// 	$fields_return = array();
-
-	// 	if(!empty($fields)):
-	// 		$icon = $fields['icon'];
-	// 		unset($fields['icon']);
-
-	// 		foreach($fields as $key_field => $field):
-	// 			$field['icon'] = $icon;
-
-	// 			if(empty($field['icon']))
-	// 				$field['icon'] = 'fa fa-cube';
-
-	// 			$field['wrapper']['class'] = $field['wrapper']['class'] . ' ' . $field['icon'];
-
-	// 			$fd = $field;
-
-	// 			$key_field = explode('__', $key_field);
-
-	// 			$dir = plugin_dir_path(__FILE__) . 'fields/' . $key_field[0] . '.php';
-	// 			if(file_exists($dir))
-	// 				include $dir;
-
-	// 			if($key_field[0] == 'repeater'):
-	// 				if(empty($key_field[1]))
-	// 					$key_field[1] = rand(100, 1000);
-
-	// 				$fd = self::subFields($fd,$key_field[1]);
-	// 			endif;
-
-	// 			$fields_return[] = array_merge($field, $fd);
-	// 			$icon = 'not-icon';
-	// 		endforeach;
-	// 	endif;
-		
-	// 	// Mescla os campos cadastrados no functions do widget com os campos cadastrados pelo admin
-	// 	$fields_return = array_merge($fields_return, self::getFieldsGroups($widget));
-		
-	// 	return $fields_return;
-    // }
-    
     /**
 	 * getFieldsGroups Retorna todos os campos de grupos cadastrados para o widget
 	 *
@@ -468,9 +427,16 @@ Class Utils {
 				$columns .= ' ' . $w_content['content']['field_grid_columns_tablet_' . $layout_widget . '_widget_acf_key'];
 				$columns .= ' ' . $w_content['content']['field_grid_columns_desktop_' . $layout_widget . '_widget_acf_key'];
 				$style = '';
-				
-				if($columns == 'full-widget-acf')
-					$style = 'style="width: 100%; overflow: hidden;"';
+				$margin_top = $w_content['content']['margin_' . $layout_widget . '_widget_acf_key']['margin_top'];
+				$margin_bottom = $w_content['content']['margin_' . $layout_widget . '_widget_acf_key']['margin_bottom'];
+
+				if(!empty($margin_top))
+					$style .= "margin-top: {$margin_top}px;";
+				if(!empty($margin_bottom))
+					$style .= "margin-bottom: {$margin_bottom}px;";
+
+				if(!empty($style))
+					$style = "style=\"{$style}\"";
 				
 				$html .= sprintf(
 					"<div id=\"{$widget_name}-{$layout_count}-{$widget_count}\" class=\"widget-acf {$widget_name} {$columns}%s\"%s>", 
