@@ -215,36 +215,11 @@ body.widgets-acf-modal-opened{
     vertical-align: 2px;
 }
 
-.widgets-acf-modal.-open .widgets-acf-modal-title > button.close{
-    height: 50px;
-    width: 50px;
-    color: #666;
-    border:0;
-    border-left: 0;
-    margin: 0;
-    padding:0;
-    border-radius: 0;
+.widgets-acf-modal.-open .widgets-acf-modal-title > button.button-close{
     position: absolute;
-    top:0;
-    right:0;
-    transition: color .1s ease-in-out, background .1s ease-in-out;
-    background:none;
-    cursor:pointer;
-    margin: 0;
-}
-
-.widgets-acf-modal.-open .widgets-acf-modal-title > button.close:hover{
-    color: #00a0d2;
-}
-
-.widgets-acf-modal.-open .widgets-acf-modal-title > button.close:before{
-    height: 50px;
-    width: 50px;
-    line-height: 50px !important;
-    font: normal 20px/1 dashicons;
-    content: "\f158";
-    margin: 0;
-    padding:0;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
 }
 
 /*

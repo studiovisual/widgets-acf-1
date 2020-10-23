@@ -31,9 +31,9 @@
             if(!$target.find('> .widgets-acf-modal-wrapper > .widgets-acf-modal-content').length)
                 $target.find('> .widgets-acf-modal-wrapper').wrapInner('<div class="widgets-acf-modal-content" />');
             
-            $target.find('> .widgets-acf-modal-wrapper').prepend('<div class="widgets-acf-modal-wrapper-overlay"></div><div class="widgets-acf-modal-title"><span class="title">' + args.title + '</span><button class="close"></button></div>');
+            $target.find('> .widgets-acf-modal-wrapper').prepend('<div class="widgets-acf-modal-wrapper-overlay"></div><div class="widgets-acf-modal-title"><span class="title">' + args.title + '</span><button class="button button-primary button-close">Concluir</button></div>');
             
-            $target.find('.widgets-acf-modal-title > .close').click(function(e) {
+            $target.find('.widgets-acf-modal-title > .button-close').click(function(e) {
                 e.preventDefault();
                 model.close(args);
             });

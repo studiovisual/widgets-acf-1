@@ -449,6 +449,12 @@ Class Utils {
 				$fields = $w_content['content'];
 				$widget = new stdClass();
 				$widget->fields = self::parseFields($fields);
+
+				$widget->layout = $layout['attr'];
+				foreach($widget->layout as $key => $layout_attr):
+					$widget->layout[str_replace('layout_', '', $key)] = $layout_attr;
+					unset($widget->layout[$key]);
+				endforeach;
 				
 				if(function_exists('\App\template') && !$plugin_widget):
 					$template = "widgets-templates.{$widget_name}.index";
