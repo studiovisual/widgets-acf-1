@@ -327,13 +327,6 @@
             // Append virtual endpoint after each accordion
             $input.after('<div class="acf-field acf-field-accordion" data-type="accordion"><div class="acf-input"><div class="acf-fields" data-endpoint="1"></div></div></div>');
         });
-
-        $layout.find('textarea:not(.editor-initialized), input[type="text"]:not(.wp-color-picker):not(.widgets-acf-flexible-control-title)').each(function() {
-            var $element = $(this);
-
-            $element.removeClass('editor-initialized');
-            $element.next('.ckeditor_inline').remove();
-        });
     }
 
     // Flexible: Duplicate
@@ -502,7 +495,17 @@
     };
 
     acf.add_action('append', function($el) {
-        model.cleanLayouts($el);
+        var $context = $($el.context);
+        if($el.hasClass('layout') || $context.hasClass('acf-field-widgets'))
+            return;
+
+        $el.find('textarea:not(.editor-initialized), input[type="text"]:not(.wp-color-picker):not(.widgets-acf-flexible-control-title)').each(function() {
+            var $element = $(this);
+
+            $element.removeClass('editor-initialized');
+            $element.next('.ckeditor_inline').remove();
+        });
+
         model.setCkeditorInline($el);
     });
 
@@ -543,35 +546,39 @@
             { name: 'others', groups: [ 'others' ] },
         ];
 
-        $layout.find('textarea:not(.editor-initialized), input[type="text"]:not(.wp-color-picker):not(.widgets-acf-flexible-control-title):not(.editor-initialized)').each(function() {
-            var $input = $(this);
-            var id_div = $input.attr('name') + (new Date().getTime());
-            var isTextInput = $input.attr('type') == 'text';
-    
-            $input.addClass('editor-initialized');
+        // setTimeout(() => {
+            $layout.find('textarea:not(.editor-initialized), input[type="text"]:not(.wp-color-picker):not(.widgets-acf-flexible-control-title):not(.editor-initialized)').each(function() {
+                if(!jQuery(this).closest('.acf-color-picker')[0] && !jQuery(this).closest('.acf-clone')[0]) {
+                    var $input = $(this);
+                    var id_div = $input.attr('name') + (new Date().getTime());
+                    var isTextInput = $input.attr('type') == 'text';
+            
+                    $input.addClass('editor-initialized');
 
-            /*var div_editor =*/ $('<div id="' + id_div + '" class="ckeditor_inline ckeditor_inline_input_text" contenteditable="true" >' + $input.val() + '</div>')
-                .appendTo($input.parent());
+                    /*var div_editor =*/ $('<div id="' + id_div + '" class="ckeditor_inline ckeditor_inline_input_text" contenteditable="true" >' + $input.val() + '</div>')
+                        .appendTo($input.parent());
 
-            // div_editor.one('click', function() {
-            var editor;
+                    // div_editor.one('click', function() {
+                    var editor;
 
-            CKEDITOR.disableAutoInline = true;
+                    CKEDITOR.disableAutoInline = true;
 
-            editor = CKEDITOR.inline(id_div, {
-                enterMode: CKEDITOR.ENTER_BR,
-                autoParagraph: true,
-                forcePasteAsPlainText: true,
-                font_names: fonts,
-                fontSize_sizes: fontSizes,
-                toolbarGroups: isTextInput ? toolbarText : toolbarTextArea,
-                stylesSet: stylesSet,
+                    editor = CKEDITOR.inline(id_div, {
+                        enterMode: CKEDITOR.ENTER_BR,
+                        autoParagraph: true,
+                        forcePasteAsPlainText: true,
+                        font_names: fonts,
+                        fontSize_sizes: fontSizes,
+                        toolbarGroups: isTextInput ? toolbarText : toolbarTextArea,
+                        stylesSet: stylesSet,
+                    });
+
+                    editor.on('change', function() {
+                        $input.val(editor.getData());
+                    });
+                }
             });
-
-            editor.on('change', function() {
-                $input.val(editor.getData());
-            });
-        });
+        // }, 200);
     };
 
     model.modalSettings = function(e) {
