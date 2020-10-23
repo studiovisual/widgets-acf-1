@@ -581,3 +581,7 @@ input.widgets-acf-flexible-control-title{
 .acf-flexible-content .values[data-align-vertical="end"] {
 	align-items: flex-end;
 }
+
+.CodeMirror-hints {
+	z-index: 10000000000 !important;
+}

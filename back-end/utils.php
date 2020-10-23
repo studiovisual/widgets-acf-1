@@ -380,8 +380,8 @@ Class Utils {
 				$html .= " id=\"{$id_setting}\"";
 			if(!empty($class_setting))
 				$html .= " class=\"{$class_setting}\"";
-			if(!empty($style_bg) || !empty($style_attr))
-				$html .= " style=\"" . implode(' ', $style_bg) . ' ' . implode(' ', $style_attr) . "\"";
+			if(!empty($style_bg) || !empty($style_attr) || !empty($layout['attr']['layout_custom_css']))
+				$html .= " style=\"" . implode(' ', $style_bg) . ' ' . implode(' ', $style_attr) . $layout['attr']['layout_custom_css'] . "\"";
 			
 			$html .= ">";
 			

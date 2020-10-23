@@ -259,5 +259,22 @@ $fields_layout_settings = array(
 				),
 			),
 		),
+		array(
+			'key' => 'layout_accordion_position_end',
+			'name' => 'accordion_position_end',
+			'type' => 'accordion',
+			'endpoint' => true,
+		),
+
+		array(
+			'key' => 'layout_custom_css',
+			'label' => 'Estilo customizado',
+			'name' => 'custom_css',
+			'instructions' => 'Estilo que será aplicado diretamente na seção',
+			'type' => 'textarea',
+			'wrapper' => array (
+				'class' => 'code-area',
+			),
+		),
 	),
 );

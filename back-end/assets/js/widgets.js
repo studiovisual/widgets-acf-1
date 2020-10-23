@@ -591,6 +591,33 @@
         // Open modal
         modal.open($modal, {
             title: $layout_title,
+            onOpen: function() {
+                model.codeMirror($modal);
+            },
+        });
+    };
+
+    model.codeMirror = function($modal) {
+        $modal.find('.code-area:not(.code-editor-initialized)').each(function() {
+            var $element = $(this);
+            var editorSettings = wp.codeEditor.defaultSettings ? _.clone( wp.codeEditor.defaultSettings ) : {};
+            editorSettings.codemirror = _.extend(
+                {},
+                editorSettings.codemirror,
+                {
+                    theme: 'monokai',
+                    tabSize: 2,
+                    lineNumbers: true,
+                    styleActiveLine: true,
+                    matchBrackets: true,
+                    autoCloseBrackets: true,
+                    mode: 'css',
+                    indentWithTabs: true
+                }
+            );
+             
+            $element.addClass('code-editor-initialized');
+            wp.codeEditor.initialize($element.find('textarea'), editorSettings);
         });
     };
 
