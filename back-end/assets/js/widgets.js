@@ -507,7 +507,7 @@
         // else {
             var toolbarText = [
                 [ 'RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike' ],
-                [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
+                [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList','BulletedList' ],
                 [ 'Link', 'Unlink' ], 
                 // [ 'EmojiPanel' ],
                 [ /*'Font',*/ 'FontSize', 'lineheight', 'LetterSpacing' ],
@@ -517,10 +517,10 @@
             var toolbarTextArea = [
                 [ 'RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike' ],
                 [ 'NumberedList', 'BulletedList', 'Blockquote' ],
-                [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
+                [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList','BulletedList' ],
                 [ 'Link', 'Unlink' ], 
                 [ 'HorizontalRule', /*'EmojiPanel'*/ ],
-                [ /*'Font',*/ 'FontSize', 'lineheight', 'letterspacing' ],
+                [ /*'Font',*/ 'FontSize', 'lineheight', 'letterspacing'],
                 [ 'TextColor', 'BGColor' ],
                 // [ 'TransformTextToLowercase', 'TransformTextToUppercase', 'TransformTextCapitalize' ]
             ];
