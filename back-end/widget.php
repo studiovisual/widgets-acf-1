@@ -6,6 +6,7 @@ if(!defined('ABSPATH'))
 class Widget extends acf_field_flexible_content {
     
     public $flexible = '';
+    public $layout;
     
     function __construct() {
         parent::initialize();
@@ -38,6 +39,8 @@ class Widget extends acf_field_flexible_content {
     function renderLayoutsSettingsBefore($field) {
         if($field['key'] != 'layout_settings')
             return;
+
+        $this->layout = $field['value']['layout_align'];
         ?>
 
         <div class="widgets-acf-modal -settings">
@@ -145,11 +148,10 @@ class Widget extends acf_field_flexible_content {
         $no_value_message = __('Click the "%s" button below to start creating your layout', 'acf');
         $no_value_message = apply_filters('acf/fields/flexible_content/no_value_message', $no_value_message, $field);
 
-        $settings = get_field('layout_settings');
         $div_values = array(
             'class'		=> 'values',
-            'data-align-horizontal'	=> $settings['align']['horizontal'],
-            'data-align-vertical'	=> $settings['align']['vertical'],
+            'data-align-horizontal'	=> $this->layout['layout_align_horizontal'],
+            'data-align-vertical'	=> $this->layout['layout_align_vertical'],
         );
     ?>
     <div <?php acf_esc_attr_e( $div ); ?>>

@@ -730,13 +730,16 @@
     
 
     $(document).on('click', '.widget-layout-horizontal input', function() {
-        $element.closest('td.acf-fields').find('.values').attr('data-align-horizontal', $(this).val());
+        var $element = $(this);
+        $element.closest('td.acf-fields').find('.values').attr('data-align-horizontal', $element.val());
     });
     $(document).on('click', '.widget-layout-vertical input', function() {
-        $element.closest('td.acf-fields').find('.values').attr('data-align-vertical', $(this).val());
+        var $element = $(this);
+        $element.closest('td.acf-fields').find('.values').attr('data-align-vertical', $element.val());
     });
     $(document).on('change', '.grid-widget-settings--desktop select', function() {
-        $element.closest('.layout').attr('data-columns-desktop', $(this).val());
+        var $element = $(this);
+        $element.closest('.layout').attr('data-columns-desktop', $element.val());
     });
 
     $(document).on('mouseenter', '.grid-widget-settings', function() {
