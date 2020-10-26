@@ -562,6 +562,7 @@
                     var editor;
 
                     CKEDITOR.disableAutoInline = true;
+                    CKEDITOR.config.allowedContent = true;
 
                     editor = CKEDITOR.inline(id_div, {
                         enterMode: CKEDITOR.ENTER_BR,
