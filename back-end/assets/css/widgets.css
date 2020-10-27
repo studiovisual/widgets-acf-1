@@ -585,3 +585,7 @@ input.widgets-acf-flexible-control-title{
 .CodeMirror-hints {
 	z-index: 10000000000 !important;
 }
+
+#postdivrich {
+	display: none;
+}
