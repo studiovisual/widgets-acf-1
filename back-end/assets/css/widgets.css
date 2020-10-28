@@ -586,6 +586,6 @@ input.widgets-acf-flexible-control-title{
 	z-index: 10000000000 !important;
 }
 
-/* #postdivrich {
-	display: none;
-} */
+#edittag {
+	max-width: unset !important;
+}
