@@ -393,7 +393,7 @@ Class Utils {
 			$align = ' align-items-' . $layout['attr']['layout_align']['layout_align_vertical'];
 			$align .= ' justify-content-' . $layout['attr']['layout_align']['layout_align_horizontal'];
 			
-			$html .= '<div class="row' . $align . '">';
+			$html .= '<div class="row' . $align . ($layout['attr']['layout_width'] != 'container' ? ' mx-0' : '') .'">';
 			
 			$count_column = 0;
 			$widget_count = 1;
