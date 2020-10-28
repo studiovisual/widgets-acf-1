@@ -54,14 +54,17 @@ class WidgetsACF {
      */
 	public function includes() {
 		include_once('back-end/utils.php');
-		include_once('back-end/widgets.php');
-		include_once('back-end/widget.php');
-		include_once('back-end/painel.php');
-		include_once('back-end/admin.php');
 		include_once('back-end/acf/widgets-location.php');
-		include_once('back-end/duplicate-widgets.php');
+		include_once('back-end/widgets.php');
+		include_once('back-end/painel.php');
 
-		include_once('front-end/widget-template.php');
+		if(is_admin()):
+			include_once('back-end/widget.php');
+			include_once('back-end/admin.php');
+			include_once('back-end/duplicate-widgets.php');
+		else:
+			include_once('front-end/widget-template.php');
+		endif;
 	}
 
 	public function initialize() {
@@ -69,10 +72,13 @@ class WidgetsACF {
 		$plugin_nome = 'Widgets ACF';
 		
 		new Widgets();
-		new Admin();
-		
-		$actions = new WidgetTemplate();
-		$duplicate = new DuplicateWidgets();
+		if(is_admin()):
+			new Admin();
+
+			$duplicate = new DuplicateWidgets();
+		else:
+			new WidgetTemplate();
+		endif;
 	}
 	
 	/**

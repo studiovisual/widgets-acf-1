@@ -28,102 +28,78 @@ Class Widgets {
 
 		Painel::field_color($widget_adm['taxonomy']);
 
-		// Define widget em post_type selecionados
-		if(!empty($widget_adm['post_type'])):
-			foreach($widget_adm['post_type'] as $page):
-				$acf_base['location'][][] = array(
-					'param'=>'post_type',
-					'operator'=>'==',
-					'value'=>$page,
-				);
+		if(is_admin()):
+			// Define widget em post_type selecionados
+			if(!empty($widget_adm['post_type']) && !empty($_GET['post'])):
+				$post_type = get_post_type($_GET['post']);
+				
+				if(in_array($post_type, $widget_adm['post_type'])):
+					$acf_base['location'][][] = array(
+						'param' => 'post_type',
+						'operator' => '==',
+						'value' => $post_type,
+					);
 
-				$posts = get_post(
-					array(
-						'post_type' => $page,
-						'posts_per_page' => -1,
-					)
-				);
-
-				foreach($posts as $post):
-					if($post->post_content != '[acf_widgets]'):
-						$my_post = array(
-							'ID' => $post->ID, 
-							'post_content' => '[acf_widgets]',
-						);
-
-						wp_update_post($my_post);
-					endif;
-				endforeach;
-			endforeach;
-		endif;
-
-		// Define widget em  paginas selecionadas
-		if(!empty($widget_adm['page'])):
-			foreach($widget_adm['page'] as $page):
-				$acf_base['location'][][] = array(
-					'param' => 'page',
-					'operator' => '==',
-					'value' => $page,
-				);
-
-				$post = get_post($page);
-				if($post->post_content != '[acf_widgets]'):
 					$my_post = array(
-						'ID' => $post->ID, 
+						'ID' => $_GET['post'], 
 						'post_content' => '[acf_widgets]',
 					);
 
 					wp_update_post($my_post);
 				endif;
-			endforeach;
-		endif;
+			endif;
 
-		// Define widget em  modelos selecionadas
-		if(!empty($widget_adm['models'])):
-			foreach($widget_adm['models'] as $model):
-				$acf_base['location'][][] = array(
-					'param' => 'page_template',
-					'operator' => '==',
-					'value' => $model,
-				);
+			// Define widget em paginas selecionadas
+			if(!empty($widget_adm['page']) && !empty($_GET['post'])):
+				if(in_array($_GET['post'], $widget_adm['page'])):
+					$acf_base['location'][][] = array(
+						'param' => 'page',
+						'operator' => '==',
+						'value' => $_GET['post'],
+					);
 
-				$pages = get_posts(
-					array(
-						'post_type' => 'page',
-						'meta_key' => '_wp_page_template',
-						'meta_value' => $model,
-					)
-				);
+					$my_post = array(
+						'ID' => $_GET['post'], 
+						'post_content' => '[acf_widgets]',
+					);
 
-				foreach($pages as $page):
-					if($page->post_content != '[acf_widgets]'):
-						$my_post = array(
-							'ID' => $page->ID, 
-							'post_content' => '[acf_widgets]',
-						);
+					wp_update_post($my_post);
+				endif;
+			endif;
 
-						wp_update_post($my_post);
-					endif;
-				endforeach;
-			endforeach;
-		endif;
+			// Define widget em modelos selecionadas
+			if(!empty($widget_adm['models']) && !empty($_GET['post'])):
+				$current_model = get_post_meta($_GET['post'], '_wp_page_template', true);
 
-		// Define widget em categorias selecionadas
-		if(!empty($widget_adm['taxonomy'])):
-			foreach($widget_adm['taxonomy'] as $page):
-				$acf_base['location'][][] = array(
-					'param' => 'taxonomy',
-					'operator' => '==',
-					'value' => $page,
-				);
+				if(in_array($current_model, $widget_adm['models'])):
+					$acf_base['location'][][] = array(
+						'param' => 'page_template',
+						'operator' => '==',
+						'value' => $current_model,
+					);
 
-				$terms = get_terms($page, array('hide_empty' => false));
+					$my_post = array(
+						'ID' => $_GET['post'], 
+						'post_content' => '[acf_widgets]',
+					);
 
-				foreach($terms as $term):
-					if($term->description!='[acf_widgets]')
-						wp_update_term($term->term_id, $page, array('name' => $term->name, 'description' => '[acf_widgets]'));
-				endforeach;
-			endforeach;
+					wp_update_post($my_post);
+				endif;
+			endif;
+
+			// Define widget em categorias selecionadas
+			if(!empty($widget_adm['taxonomy']) && !empty($_GET['taxonomy'])):
+				if(in_array($_GET['taxonomy'], $widget_adm['taxonomy'])):
+					$acf_base['location'][][] = array(
+						'param' => 'taxonomy',
+						'operator' => '==',
+						'value' => $_GET['taxonomy'],
+					);
+
+					$term = get_term($_GET['tag_ID'], $_GET['taxonomy']);
+					wp_update_term($_GET['tag_ID'], $_GET['taxonomy'], array('name' => $term->name, 'description' => '[acf_widgets]'));
+				endif;
+			endif;
 		endif;
 
 		$acf_base['fields'][0]['sub_fields'][2]['wrapper']['class'] = 'column_3';
