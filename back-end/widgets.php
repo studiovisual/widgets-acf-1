@@ -42,7 +42,7 @@ Class Widgets {
 
 					$my_post = array(
 						'ID' => $_GET['post'], 
-						'post_content' => '[acf_widgets]',
+						'post_content' => '[acf_widgets id="' . $_GET['post'] . '"]',
 					);
 
 					wp_update_post($my_post);
@@ -60,7 +60,7 @@ Class Widgets {
 
 					$my_post = array(
 						'ID' => $_GET['post'], 
-						'post_content' => '[acf_widgets]',
+						'post_content' => '[acf_widgets id="' . $_GET['post'] . '"]',
 					);
 
 					wp_update_post($my_post);
@@ -80,7 +80,7 @@ Class Widgets {
 
 					$my_post = array(
 						'ID' => $_GET['post'], 
-						'post_content' => '[acf_widgets]',
+						'post_content' => '[acf_widgets id="' . $_GET['post'] . '"]',
 					);
 
 					wp_update_post($my_post);
@@ -97,7 +97,7 @@ Class Widgets {
 					);
 
 					$term = get_term($_GET['tag_ID'], $_GET['taxonomy']);
-					wp_update_term($_GET['tag_ID'], $_GET['taxonomy'], array('name' => $term->name, 'description' => '[acf_widgets]'));
+					wp_update_term($_GET['tag_ID'], $_GET['taxonomy'], array('name' => $term->name, 'description' => '[acf_widgets id="' . $_GET['tag_ID'] . '" taxonomy="' . $_GET['taxonomy'] . '"]'));
 				endif;
 			endif;
 		endif;

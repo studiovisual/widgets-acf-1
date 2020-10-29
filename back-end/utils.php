@@ -330,7 +330,7 @@ Class Utils {
 		return $result;
 	}
 
-	static function getTemplates($layout_content, $attr = null) {
+	static function getTemplates($layout_content) {
 		$html = '';
 		$css_widgets = '';
 		$js_widgets = '';

@@ -6,14 +6,20 @@ Class WidgetTemplate {
 		add_shortcode('acf_widgets', array($this, 'init'));
 	}
 
-	public function init($attr = null) {
-		$p_id = get_queried_object();
-		$widgets = $this->widgets($p_id, $attr);
+	public function init($args = null) {
+		if(isset($args['id']) && isset($args['taxonomy']))
+			$object = get_term($args['id'], $args['taxonomy']);
+		elseif(isset($args['id']))
+			$object = get_post($args['id']);
+		else
+			$object = get_queried_object();
+
+		$widgets = $this->widgets($object);
 
 		return $widgets;
 	}
 
-	public function widgets($type, $attr = null) {
+	public function widgets($type) {
 		$widgets = array();
 		$grid = 0;
 
@@ -40,7 +46,7 @@ Class WidgetTemplate {
 			endwhile;
 		endif;
 
-		return Utils::getTemplates($widgets, $attr);
+		return Utils::getTemplates($widgets);
 	}
 
 	public function getClassWidget($fields) {
