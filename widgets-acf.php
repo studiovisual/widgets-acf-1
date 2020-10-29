@@ -115,10 +115,12 @@ class WidgetsACF {
 		if(!empty(get_field('widgets_acf_show_fonts', 'options'))):
 			$fonts_selected = get_field('fonts_types_widget_acf', 'options');
 			
-			foreach ($fonts_selected as $font):
-				$font_string  = explode('--', $font);
-				wp_enqueue_style('font_google_widgets_acf' . $font_string[0], 'https://fonts.googleapis.com/css?family=' . $font_string[0] . '|' . $font_string[0] . ':' . $font_string[1] . '');
-			endforeach;
+			if(!empty($fonts_selected)):
+				foreach($fonts_selected as $font):
+					$font_string  = explode('--', $font);
+					wp_enqueue_style('font_google_widgets_acf' . $font_string[0], 'https://fonts.googleapis.com/css?family=' . $font_string[0] . '|' . $font_string[0] . ':' . $font_string[1] . '');
+				endforeach;
+			endif;
 		endif;
 		
 		if(!empty(get_field('widgets_acf_show_css','options')))
