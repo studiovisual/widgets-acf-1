@@ -18,8 +18,8 @@ class WidgetsACF {
 		add_filter('acf/location/rule_values/widget_acf', array($this, 'registerLocationFields'));
 		
 		add_action('acf/input/admin_enqueue_scripts', array($this, 'enqueue'));
-		add_action('acf/init', array($this, 'includes'), 99);
-		add_action('acf/init', array($this, 'initialize'), 100);
+		add_action('init', array($this, 'includes'), 99999999);
+		add_action('init', array($this, 'initialize'), 999999999);
 		add_filter('term_description', 'do_shortcode');
 	}
 
