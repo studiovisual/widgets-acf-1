@@ -60,6 +60,7 @@ class WidgetsACF {
 		include_once('back-end/painel.php');
 
 		if(is_admin()):
+			include_once('back-end/section.php');
 			include_once('back-end/widget.php');
 			include_once('back-end/admin.php');
 			include_once('back-end/duplicate-widgets.php');

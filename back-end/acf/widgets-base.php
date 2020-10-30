@@ -15,7 +15,7 @@ Class AcfWidget {
 					'type' => 'repeater',
 					'min' => 1,
 					'layout' => 'block',
-					'button_label' => 'Adicionar Layout',
+					'button_label' => 'Adicionar seção',
 					'sub_fields' => array (
 						array(
 							// 'key' => 'field_tamanho_grid',
@@ -53,10 +53,10 @@ Class AcfWidget {
 						1.5 => $fields_layout_settings,
 						2 => array (
 							'key' => 'widgets_contents',
-							'label' => 'Seleção de conteudo',
+							'label' => '',
 							'name' => 'widgets_contents',
 							'type' => 'flexible_content',
-							'instructions' => 'Insira, pegue e arraste os widgets selecinados.',
+							'instructions' => 'Insira, pegue e arraste os widgets selecionados.',
 							'button_label' => '<span class="dashicons dashicons-plus-alt2 acf-js-tooltip" title="Adicionar Widget"></span>',
 							'layouts' => array (),//Layout widgets
 						),

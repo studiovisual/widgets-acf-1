@@ -585,7 +585,7 @@
     model.modalSettings = function(e) {
         var $el = $(e.currentTarget);
         // Modal data
-        var $modal = $el.parents('.acf-fields').first().find('.widgets-acf-modal.-settings');
+        var $modal = $el.parents('.acf-row').find('.widgets-acf-modal.-settings');
         
         var $layout_title = $el.attr('title');
         
@@ -721,12 +721,28 @@
         });
     };
 
+    // $(document).on('click', '[data-type="flexible_content"] > .acf-label > label', model.editSectionTitle);
+    // model.editSectionTitle = function(e, $el) {
+    //     // Get Flexible
+    //     var flexible = this;
+    //     console.log($el);
+
+    //     // // Stop propagation
+    //     // e.stopPropagation();
+    //     // // Toggle
+    //     // flexible.editLayoutTitleToggle(e, $el);
+    // }
+
+
+
     model.setAjaxFonts();
     $(document).on('click', '[data-action="search"]', function(e) {
         e.stopPropagation();
     });
     $(document).on('input', '[data-action="search"]', model.search);
-    $(document).on('click', '[data-name="settings-layout"]', model.modalSettings);
+    $(document).on('click', '[data-event="settings-layout"]', model.modalSettings);
+
+    
     
     
 

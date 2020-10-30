@@ -187,16 +187,9 @@ class Widget extends acf_field_flexible_content {
                 'href'      => '#',
                 'data-name' => 'add-layout',
             );
-            $button_settings = array(
-                'class'     => 'acf-button button button-secondary acf-js-tooltip',
-                'href'      => '#',
-                'title'     => 'Ajustes de layout',
-                'data-name' => 'settings-layout',
-            );
         ?>
             
             <div class="acf-actions">
-                <a <?php echo acf_esc_attr($button_settings); ?>><span class="dashicons dashicons-admin-generic"></span></a>
                 <a <?php echo acf_esc_attr($button); ?>><?php echo $field['button_label']; ?></a>
             </div>
         </div>

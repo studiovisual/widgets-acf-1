@@ -8,6 +8,17 @@ $fields_layout_settings = array(
 	'layout' => 'block',
 	'sub_fields' => array(
 		array(
+			'key' => 'layout_name',
+			'label' => '',
+			'name' => 'name',
+			'type' => 'text',
+			'default_value' => 'Seção',
+			'wrapper' => array (
+				'class' => 'layout-settings-name',
+				'width' => 33,
+			),
+		),
+		array(
 			'key' => 'layout_display_mobile',
 			'label' => 'Mobile',
 			'name' => 'display_mobile',
