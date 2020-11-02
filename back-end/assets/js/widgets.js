@@ -562,7 +562,18 @@
                     var editor;
 
                     CKEDITOR.disableAutoInline = true;
-                    CKEDITOR.config.allowedContent = true;
+                    // CKEDITOR.config.allowedContent = true;
+
+                    CKEDITOR.config.allowedContent = {
+                        $1: {
+                            // Use the ability to specify elements as an object.
+                            elements: CKEDITOR.dtd,
+                            attributes: true,
+                            styles: true,
+                            classes: true
+                        }
+                    };
+                    CKEDITOR.config.disallowedContent = 'font;';
 
                     editor = CKEDITOR.inline(id_div, {
                         enterMode: CKEDITOR.ENTER_BR,
@@ -721,17 +732,17 @@
         });
     };
 
-    // $(document).on('click', '[data-type="flexible_content"] > .acf-label > label', model.editSectionTitle);
-    // model.editSectionTitle = function(e, $el) {
-    //     // Get Flexible
-    //     var flexible = this;
-    //     console.log($el);
+    $(document).on('click', '[data-type="flexible_content"] > .acf-label > label', model.editSectionTitle);
+    model.editSectionTitle = function(e, $el) {
+        // Get Flexible
+        var flexible = this;
+        console.log($el);
 
-    //     // // Stop propagation
-    //     // e.stopPropagation();
-    //     // // Toggle
-    //     // flexible.editLayoutTitleToggle(e, $el);
-    // }
+        // // Stop propagation
+        // e.stopPropagation();
+        // // Toggle
+        // flexible.editLayoutTitleToggle(e, $el);
+    }
 
 
 

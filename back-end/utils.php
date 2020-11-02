@@ -284,8 +284,10 @@ Class Utils {
     }
 
     public static function getFields($widget, $fields) {
-		// $fields = self::setFields($widget, $fields);
-		$fields = self::getFieldsGroups($widget);
+		$fields = self::getFieldsGroups($widget, acf_get_local_store('groups')->data);
+
+		if(empty($fields))
+			$fields = self::getFieldsGroups($widget, acf_get_field_groups());
 
 		$fields_base = array (
 			'key' => $widget['name'].'_widget_acf_key',
@@ -304,21 +306,21 @@ Class Utils {
 	 * @param  mixed $widget Nome do widget
 	 * @return array Array de campos cadastrados
 	 */
-	public static function getFieldsGroups($widget, $front = true) {		
+	public static function getFieldsGroups($widget, $data) {	
 		$result = array();
-		$all_field_groups = acf_get_field_groups();
+		// $all_field_groups = acf_get_field_groups();
+		// $all_field_groups = acf_get_local_store('groups')->data;
 
-		foreach($all_field_groups as $field_group):
+		foreach($data as $field_group):
 			foreach($field_group['location'] as $group_location_rules):
 				foreach($group_location_rules as $rule):
 					if($rule['param'] == 'widget_acf' && $rule['operator'] == '==' && $rule['value'] == $widget['name']):
-						$fields = acf_get_fields($field_group['ID']);
+
+						$fields = acf_get_fields($field_group['key']);
 
 						foreach($fields as $field):
-							if($front):
-								$field['wrapper']['class'] = $field['key'];
-								$field['key'] = $field['name'] . '_' . $widget['name'];
-                            endif;
+							$field['wrapper']['class'] = $field['key'];
+							$field['key'] = $field['name'] . '_' . $widget['name'];
 
 							array_push($result, $field);
 						endforeach;
