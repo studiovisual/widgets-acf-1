@@ -3,8 +3,6 @@
 Class Admin {
 
     public function __construct() {
-        include_once('acf/fields-admin.php');
-
         add_action('admin_init', array($this, 'initialize'));
         add_action('admin_menu', array($this, 'addAdminMenu'));
 
@@ -27,6 +25,7 @@ Class Admin {
 		if(!strpos($screen, "options-todos-os-widgets"))
 			return;
 			
+		include_once('acf/fields-admin.php');
 		include_once('acf/fields-code-external.php');
 
 		if(isset($_GET['export'])):

@@ -4,6 +4,7 @@
 Class Widgets {
 
 	public function __construct() {
+		add_filter('wp_insert_post_data', array($this, 'filter_post_data'), '99', 1);
 		require("acf/widgets-base.php");
 
 		$this->setWidgetsList();
@@ -11,6 +12,7 @@ Class Widgets {
 
 	private function setWidgetsList() {
 		global $widgets;
+		global $post_id;
 		
 		if(!function_exists('acf_add_local_field_group'))
 			return;
@@ -42,12 +44,7 @@ Class Widgets {
 						'value' => $post_type,
 					);
 
-					$my_post = array(
-						'ID' => $_GET['post'], 
-						'post_content' => '[acf_widgets id="' . $_GET['post'] . '"]',
-					);
-
-					wp_update_post($my_post);
+					$post_id = $_GET['post'];
 				endif;
 			endif;
 
@@ -60,18 +57,14 @@ Class Widgets {
 						'value' => $_GET['post'],
 					);
 
-					$my_post = array(
-						'ID' => $_GET['post'], 
-						'post_content' => '[acf_widgets id="' . $_GET['post'] . '"]',
-					);
-
-					wp_update_post($my_post);
+					$post_id = $_GET['post'];
 				endif;
 			endif;
 
 			// Define widget em modelos selecionadas
 			if(!empty($widget_adm['models']) && !empty($_GET['post'])):
 				$current_model = get_post_meta($_GET['post'], '_wp_page_template', true);
+				var_dump($current_model);
 
 				if(in_array($current_model, $widget_adm['models'])):
 					$acf_base['location'][][] = array(
@@ -80,12 +73,7 @@ Class Widgets {
 						'value' => $current_model,
 					);
 
-					$my_post = array(
-						'ID' => $_GET['post'], 
-						'post_content' => '[acf_widgets id="' . $_GET['post'] . '"]',
-					);
-
-					wp_update_post($my_post);
+					$post_id = $_GET['post'];
 				endif;
 			endif;
 
@@ -174,6 +162,15 @@ Class Widgets {
 		endforeach;
 
 		return $widgets;
+	}
+
+	
+
+	function filter_post_data($data) {
+		global $post_id;
+		$data['post_content'] = '[acf_widgets id="' . $post_id . '"]';
+
+		return $data;
 	}
 
 }
