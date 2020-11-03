@@ -1,4 +1,9 @@
 jQuery(function() {
+	var lazyLoadInstance = new LazyLoad({
+		elements_selector: '[data-src]',
+        use_native: true,
+	});
+
     setTimeout(function() {
 		var location_widget_acf = new RegExp('[\?&]location_widget_acf=([^&#]*)').exec(window.location.href);
         

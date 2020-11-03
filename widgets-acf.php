@@ -25,6 +25,7 @@ class WidgetsACF {
 
 	public function enqueue() {
 		wp_enqueue_script('widgets-ckeditor-js', plugins_url('back-end/assets/js/ckeditor/ckeditor.js', __FILE__));
+		wp_enqueue_script('widgets-lazyload-js', plugins_url('back-end/assets/js/lazyload.min.js', __FILE__));
 		wp_enqueue_script('widgets-main-js', plugins_url('back-end/assets/js/main.js', __FILE__));
 
 		wp_enqueue_style('widgets-modal-css', plugins_url('back-end/assets/css/modal.css', __FILE__));
@@ -58,6 +59,7 @@ class WidgetsACF {
 		include_once('back-end/painel.php');
 
 		if(is_admin()):
+			include_once('back-end/acf/image.php');
 			include_once('back-end/section.php');
 			include_once('back-end/widget.php');
 			include_once('back-end/admin.php');

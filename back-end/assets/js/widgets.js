@@ -562,18 +562,18 @@
                     var editor;
 
                     CKEDITOR.disableAutoInline = true;
-                    // CKEDITOR.config.allowedContent = true;
+                    CKEDITOR.config.allowedContent = true;
 
-                    CKEDITOR.config.allowedContent = {
-                        $1: {
-                            // Use the ability to specify elements as an object.
-                            elements: CKEDITOR.dtd,
-                            attributes: true,
-                            styles: true,
-                            classes: true
-                        }
-                    };
-                    CKEDITOR.config.disallowedContent = 'font;';
+                    // CKEDITOR.config.allowedContent = {
+                    //     $1: {
+                    //         // Use the ability to specify elements as an object.
+                    //         elements: CKEDITOR.dtd,
+                    //         attributes: true,
+                    //         styles: true,
+                    //         classes: true
+                    //     }
+                    // };
+                    // CKEDITOR.config.disallowedContent = 'font;';
 
                     editor = CKEDITOR.inline(id_div, {
                         enterMode: CKEDITOR.ENTER_BR,
