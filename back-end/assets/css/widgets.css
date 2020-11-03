@@ -526,6 +526,10 @@ input.widgets-acf-flexible-control-title{
 	background: #f9f9f9;
 }
 
+.acf-repeater.-block > table > tbody > tr > td:first-of-type {
+    border-left: 1px solid #ccd0d4 !important;
+}
+
 .acf-repeater.-block > table > tbody > tr > td:last-of-type {
     border-right: 1px solid #ccd0d4 !important;
 }
@@ -587,7 +591,7 @@ input.widgets-acf-flexible-control-title{
 	max-width: unset !important;
 }
 
-.acf-widgets-table td {
+.acf-widgets-table > tbody > tr > td {
 	box-sizing: border-box;
 	clear: both;
 	display: block;
@@ -595,7 +599,7 @@ input.widgets-acf-flexible-control-title{
 	width: 100% !important;
 }
 
-.acf-widgets-table .acf-row-handle {
+.acf-widgets-table > tbody > tr > .acf-row-handle {
 	align-items: center;
 	background: #fff !important;
 	border: 1px solid #ccd0d4 !important;
@@ -603,7 +607,7 @@ input.widgets-acf-flexible-control-title{
 	justify-content: space-between;
 }
 
-.acf-widgets-table .acf-row-handle .acf-icon {
+.acf-widgets-table > tbody > tr > .acf-row-handle .acf-icon {
 	align-items: center;
 	display: inline-flex !important;
 	justify-content: center;
@@ -612,14 +616,14 @@ input.widgets-acf-flexible-control-title{
 	top: unset !important;
 }
 
-.acf-widgets-table .acf-row-handle .acf-icon .dashicons-admin-generic {
+.acf-widgets-table > tbody > tr > .acf-row-handle .acf-icon .dashicons-admin-generic {
 	align-items: center;
 	display: flex;
 	font-size: 14px;
 	justify-content: center;
 }
 
-.acf-widgets-table .acf-row-handle .acf-fc-layout-order {
+.acf-widgets-table > tbody > tr > .acf-row-handle .acf-fc-layout-order {
 	width: 20px;
 	height: 20px;
 	border-radius: 10px;
