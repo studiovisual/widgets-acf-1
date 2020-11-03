@@ -9,10 +9,26 @@ Class Utils {
 	* @return array Array com as informações do widget
 	*/
 	public static function parseWidgetHeaders($widgetController) {
+		$url = '';
+		
+		if(strpos(dirname($widgetController), 'themes') !== false):
+			$url =
+				function_exists('\App\template') || function_exists('\Roots\view') ? 
+					get_template_directory_uri() . '/views/widgets-templates/' :
+					get_template_directory_uri() . '/widgets-templates/';
+		else:
+			$url = plugins_url('/more-widgets-templates/' , dirname(__FILE__));
+		endif;
+
 		$name = basename(dirname($widgetController));
 		$name = self::cleanWidgetName($name);
 		
 		$headers['name'] = $name;
+		$headers['cover'] = '';
+
+		$images = glob(dirname($widgetController) . "/main.*");
+		if(count($images) > 0)
+			$headers['cover'] = $url . basename(dirname($widgetController)) . '/' . basename($images[0]);
 		
 		return array_merge(
 			$headers, 
@@ -168,6 +184,7 @@ Class Utils {
     }
     
     public static function getCodes() {
+		// global $widgets;
         $widgets = array();
         $path =
             function_exists('\App\template') || function_exists('\Roots\view') ? 
@@ -190,8 +207,8 @@ Class Utils {
             if($fileinfo->isDir() && !$fileinfo->isDot()):
                 $widget_name =  str_replace('-', '_', $fileinfo->getFilename());
                 $widget_label = Utils::parseWidgetHeaders($path . '/' . $fileinfo->getFilename() . '/functions.php');
-                $widget_label['title'] = $widget_label['title'];
-                $widgets[$widget_name]['title'] = $widget_label['title'];
+				$widgets[$widget_name]['title'] = $widget_label['title'];
+				$widgets[$widget_name]['cover'] = $widget_label['cover'];
                 $dir_widget = $path . '/' . $fileinfo->getFilename();
                 $style = glob("{$dir_widget}/style.*");
 
@@ -213,10 +230,6 @@ Class Utils {
                 $functions = glob("{$dir_widget}/functions.php");
                 if($functions)
                     $widgets[$widget_name]['functions'] = self::openFile($functions[0]);
-                
-                $capa = glob("{$dir_widget}/main.png");
-                if($capa)
-                    $widgets[$widget_name]['capa'] = $path_uri . '/' . $fileinfo->getFilename() . '/main.png';
                 
                 $json = glob("{$dir_widget}/fields.json");
                 if($json):

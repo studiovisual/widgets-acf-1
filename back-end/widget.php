@@ -123,6 +123,8 @@ class Widget extends acf_field_flexible_content {
 	 *  Render Field
 	 */
     function render_field($field) {
+        global $widgets;
+
         // defaults
         if(empty($field['button_label']))
             $field['button_label'] = $this->defaults['button_label'];
@@ -202,7 +204,9 @@ class Widget extends acf_field_flexible_content {
                     <input type="search" data-action="search" placeholder="Buscar widget" />
                 </li>
             <?php foreach( $layouts as $layout ): 
-                
+                $name = str_replace('_widget_acf_key', '', $layout['key']);
+                $widget = $widgets[$name];
+
                 $atts = array(
                     'href'			=> '#',
                     'data-layout'	=> $layout['name'],
@@ -210,7 +214,12 @@ class Widget extends acf_field_flexible_content {
                     'data-max' 		=> $layout['max'],
                 );
                 
-                ?><li><a <?php acf_esc_attr_e($atts); ?>><span><?php echo $layout['label']; ?></span></a></li><?php 
+                ?><li>
+                    <a <?php acf_esc_attr_e($atts); ?>>
+                        <img data-src="<?= $widget['data']['cover'] ?>" />
+                        <span><?php echo $layout['label']; ?></span>
+                    </a>
+                </li><?php 
             
             endforeach; ?>
             </ul>
@@ -390,6 +399,11 @@ class Widget extends acf_field_flexible_content {
 	 *  Render Layout Placeholder
 	 */
     function render_layout_placeholder($value, $layout, $field, $i) {
+        global $widgets;
+
+        $name = str_replace('_widget_acf_key', '', $layout['key']);
+        $widget = $widgets[$name];
+        
         $placeholder = array(
             'class' => 'widgets-acf-fc-placeholder',
             'title' => __('Edit layout', 'acf'),
@@ -400,7 +414,7 @@ class Widget extends acf_field_flexible_content {
         ?>
         
         <div <?php echo acf_esc_attr($placeholder); ?>>
-
+            <img data-src="<?= $widget['data']['cover'] ?>" />
         </div>
 
         <?php

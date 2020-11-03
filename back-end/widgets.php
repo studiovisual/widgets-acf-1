@@ -10,10 +10,10 @@ Class Widgets {
 	}
 
 	private function setWidgetsList() {
+		global $widgets;
+		
 		if(!function_exists('acf_add_local_field_group'))
 			return;
-			
-		add_action('admin_head', array($this, 'widgetCSS'), 1);
 
 		$acf_base = AcfWidget::get_base();
 		$directory_widgets = 
@@ -23,6 +23,8 @@ Class Widgets {
 
 		if(empty($directory_widgets))
 			$directory_widgets = $this->getWidgets(plugin_dir_path(__FILE__) . '../more-widgets-templates');
+
+		$widgets = $directory_widgets;
 
 		$widget_adm = $this->getPagesSelected();
 
@@ -104,9 +106,9 @@ Class Widgets {
 
 		$acf_base['fields'][0]['sub_fields'][2]['wrapper']['class'] = 'column_3';
 
-		foreach($directory_widgets as $widget):
-			$widget['sub_fields'] = $this->setMobileFields($widget['sub_fields'], $widget['key']);
-			$acf_base['fields'][0]['sub_fields'][2]['layouts'][] = $widget;
+		foreach($widgets as $widget):
+			$widget['fields']['sub_fields'] = $this->setMobileFields($widget['fields']['sub_fields'], $widget['fields']['key']);
+			$acf_base['fields'][0]['sub_fields'][2]['layouts'][] = $widget['fields'];
 		endforeach;
 
 		acf_add_local_field_group($acf_base);
@@ -166,42 +168,12 @@ Class Widgets {
 
 				require($file);
 
-				$widgets[$widget['name']] = Utils::getFields($widget, $fields);
+				$widgets[$widget['name']]['data'] = $widget;
+				$widgets[$widget['name']]['fields'] = Utils::getFields($widget, $fields);
 			endif;
 		endforeach;
 
 		return $widgets;
-	}
-
-	public function widgetCSS() {
-		$path =
-        	function_exists('\App\template') || function_exists('\Roots\view') ? 
-				get_template_directory() . '/views/widgets-templates' :
-				get_template_directory() . '/widgets-templates';
-		
-		$temp =
-			function_exists('\App\template') || function_exists('\Roots\view') ? 
-				get_template_directory_uri() . '/views/widgets-templates/' :
-				get_template_directory_uri() . '/widgets-templates/';
-
-		if(!is_dir($path)):
-			$path = plugin_dir_path( __FILE__ ) . "../more-widgets-templates";
-			$temp = plugins_url('/more-widgets-templates/' , dirname(__FILE__));
-		endif;
-
-		$dir = new DirectoryIterator($path);
-
-		foreach($dir as $fileinfo):
-			$widget_name = $fileinfo->getFilename();
-			$widget_class = str_replace('-', '_', str_replace('-', '_', str_replace('-', '_', $widget_name)));
-
-			echo 
-				'<style>
-					.acf-field-widgets .acf-flexible-content .values .layout[data-layout="' . $widget_class . '_widget_acf"] .widgets-acf-fc-placeholder, .acf-fc-popup a[data-layout="' . $widget_class . '_widget_acf"] {
-						background-image: url("' . $temp . $widget_name . '/main.png") !important;
-					}
-				</style>';
-		endforeach;
 	}
 
 }

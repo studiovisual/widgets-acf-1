@@ -1,5 +1,5 @@
 jQuery(function() {
-	var lazyLoadInstance = new LazyLoad({
+	window.lazyLoadInstance = new LazyLoad({
 		elements_selector: '[data-src]',
         use_native: true,
 	});

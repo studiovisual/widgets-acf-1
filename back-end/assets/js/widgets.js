@@ -732,17 +732,17 @@
         });
     };
 
-    $(document).on('click', '[data-type="flexible_content"] > .acf-label > label', model.editSectionTitle);
-    model.editSectionTitle = function(e, $el) {
-        // Get Flexible
-        var flexible = this;
-        console.log($el);
+    // $(document).on('click', '[data-type="flexible_content"] > .acf-label > label', model.editSectionTitle);
+    // model.editSectionTitle = function(e, $el) {
+    //     // Get Flexible
+    //     var flexible = this;
+    //     console.log($el);
 
-        // // Stop propagation
-        // e.stopPropagation();
-        // // Toggle
-        // flexible.editLayoutTitleToggle(e, $el);
-    }
+    //     // // Stop propagation
+    //     // e.stopPropagation();
+    //     // // Toggle
+    //     // flexible.editLayoutTitleToggle(e, $el);
+    // }
 
 
 
@@ -752,10 +752,11 @@
     });
     $(document).on('input', '[data-action="search"]', model.search);
     $(document).on('click', '[data-event="settings-layout"]', model.modalSettings);
-
-    
-    
-    
+    $(document).on('click', '[data-name="add-layout"]', function() {
+        setTimeout(() => {
+            window.lazyLoadInstance.update();
+        }, 200);
+    });
 
     $(document).on('click', '.widget-layout-horizontal input', function() {
         var $element = $(this);

@@ -70,7 +70,7 @@ class WidgetsACF {
 	}
 
 	public function initialize() {
-		global $widgets, $actions, $duplicate, $plugin_nome;
+		global $actions, $duplicate, $plugin_nome;
 		$plugin_nome = 'Widgets ACF';
 		
 		new Widgets();
