@@ -64,7 +64,6 @@ Class Widgets {
 			// Define widget em modelos selecionadas
 			if(!empty($widget_adm['models']) && !empty($_GET['post'])):
 				$current_model = get_post_meta($_GET['post'], '_wp_page_template', true);
-				var_dump($current_model);
 
 				if(in_array($current_model, $widget_adm['models'])):
 					$acf_base['location'][][] = array(
