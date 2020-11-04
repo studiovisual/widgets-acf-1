@@ -22,58 +22,58 @@ Class Admin {
 
 		$screen = $_GET['page'];
 
-		if(!strpos($screen, "options-todos-os-widgets"))
-			return;
-			
-		include_once('acf/fields-admin.php');
-		include_once('acf/fields-code-external.php');
+		if(strpos($screen, "options-todos-os-widgets")):
+			include_once('acf/fields-code-external.php');
 
-		if(isset($_GET['export'])):
-			$location = new WidgetsLocation;
-			$location->export_zip($_GET['export']);
-		endif;
-			
-		if(isset($_GET['del_group_field'])):
-			$post = get_post($_GET['del_group_field']);
-			
-			if($post->post_type="acf-field-group"):
-				$groups = acf_get_field_groups();
-				
-				foreach($groups as $group):
-					if($_GET['del_group_field'] != $group['ID'])
-						continue;
-						
-					$widget_location = $group['location'][0][0]['value'];
-					wp_delete_post($_GET['del_group_field'], true);
-					$this->exportJsonFields(null, null, null, null, $widget_location);
-
-					echo '<script>alert("Grupo de Campos deletado com sucesso!"); window.location.href="'.admin_url('admin.php?page=acf-options-todos-os-widgets').'";</script>';
-				endforeach;
+			if(isset($_GET['export'])):
+				$location = new WidgetsLocation;
+				$location->export_zip($_GET['export']);
 			endif;
-		endif;
-			
-		if(isset($_GET['del'])):
-			$path =
-				function_exists('\App\template') || function_exists('\Roots\view') ? 
-					get_template_directory() . '/views/widgets-templates/'.$_GET['del'] :
-					get_template_directory() . '/widgets-templates/'.$_GET['del'];
-			
-			if(is_dir($path)):
-				$arquivos = glob($path . "/*.*");
+				
+			if(isset($_GET['del_group_field'])):
+				$post = get_post($_GET['del_group_field']);
+				
+				if($post->post_type="acf-field-group"):
+					$groups = acf_get_field_groups();
+					
+					foreach($groups as $group):
+						if($_GET['del_group_field'] != $group['ID'])
+							continue;
+							
+						$widget_location = $group['location'][0][0]['value'];
+						wp_delete_post($_GET['del_group_field'], true);
+						$this->exportJsonFields(null, null, null, null, $widget_location);
 
-				foreach($arquivos as $arquivo)
-					unlink($arquivo);
-				
-				$handle = opendir($path);
-				closedir($handle);
-				rmdir($path);
-				
-				echo '<script>alert("Widget deletado com sucesso!");window.location="'.admin_url('admin.php?page=acf-options-todos-os-widgets').'";</script>';
-				die();
+						echo '<script>alert("Grupo de Campos deletado com sucesso!"); window.location.href="'.admin_url('admin.php?page=acf-options-todos-os-widgets').'";</script>';
+					endforeach;
+				endif;
 			endif;
+				
+			if(isset($_GET['del'])):
+				$path =
+					function_exists('\App\template') || function_exists('\Roots\view') ? 
+						get_template_directory() . '/views/widgets-templates/'.$_GET['del'] :
+						get_template_directory() . '/widgets-templates/'.$_GET['del'];
+				
+				if(is_dir($path)):
+					$arquivos = glob($path . "/*.*");
+
+					foreach($arquivos as $arquivo)
+						unlink($arquivo);
+					
+					$handle = opendir($path);
+					closedir($handle);
+					rmdir($path);
+					
+					echo '<script>alert("Widget deletado com sucesso!");window.location="'.admin_url('admin.php?page=acf-options-todos-os-widgets').'";</script>';
+					die();
+				endif;
+			endif;
+			
+			add_filter('pre_update_option', array($this, 'editorExternal'));
+		else:
+			include_once('acf/fields-admin.php');
 		endif;
-		
-		add_filter('pre_update_option', array($this, 'editorExternal'));
     }
     
     public function editorExternal() {

@@ -64,6 +64,9 @@ Class Widgets {
 			// Define widget em modelos selecionadas
 			if(!empty($widget_adm['models']) && !empty($_GET['post'])):
 				$current_model = get_post_meta($_GET['post'], '_wp_page_template', true);
+			
+				if(empty($current_model))
+					$current_model = 'default';
 
 				if(in_array($current_model, $widget_adm['models'])):
 					$acf_base['location'][][] = array(
@@ -163,11 +166,11 @@ Class Widgets {
 		return $widgets;
 	}
 
-	
 
 	function filter_post_data($data) {
-		global $post_id;
-		$data['post_content'] = '[acf_widgets id="' . $post_id . '"]';
+		// global $post_id;
+		// $data['post_content'] = '[acf_widgets id="' . $post_id . '"]';
+		$data['post_content'] = '[acf_widgets]';
 
 		return $data;
 	}

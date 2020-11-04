@@ -63,24 +63,21 @@ class WidgetsACF {
 			include_once('back-end/section.php');
 			include_once('back-end/widget.php');
 			include_once('back-end/admin.php');
-			include_once('back-end/duplicate-widgets.php');
 		else:
 			include_once('front-end/widget-template.php');
 		endif;
 	}
 
 	public function initialize() {
-		global $actions, $duplicate, $plugin_nome;
+		global $actions, $plugin_nome;
 		$plugin_nome = 'Widgets ACF';
 		
 		new Widgets();
-		if(is_admin()):
-			new Admin();
 
-			$duplicate = new DuplicateWidgets();
-		else:
+		if(is_admin())
+			new Admin();
+		else
 			new WidgetTemplate();
-		endif;
 	}
 	
 	/**
