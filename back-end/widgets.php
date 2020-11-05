@@ -164,9 +164,8 @@ Class Widgets {
 	}
 
 	function filter_post_data($data, $post) {
-		session_start();
 		if(isset($_SESSION['session_' . $post['ID']])):
-			$data['post_content'] = '[acf_widgets]';
+			$data['post_content'] = '[acf_widgets id="' . $post['ID'] . '"]';
 			unset($_SESSION['session_' . $post['ID']]);
 		endif;
 
