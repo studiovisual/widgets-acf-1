@@ -28,6 +28,10 @@ class WidgetsACF {
 		wp_enqueue_script('widgets-lazyload-js', plugins_url('back-end/assets/js/lazyload.min.js', __FILE__));
 		wp_enqueue_script('widgets-main-js', plugins_url('back-end/assets/js/main.js', __FILE__));
 
+		// wp_enqueue_script('widgets-admin-js', plugins_url('back-end/assets/js/admin.js', __FILE__));
+		// wp_enqueue_script('widgets-modal-js', plugins_url('back-end/assets/js/modal.js', __FILE__));
+		// wp_enqueue_script('widgets-js', plugins_url('back-end/assets/js/widgets.js', __FILE__));
+
 		wp_enqueue_style('widgets-modal-css', plugins_url('back-end/assets/css/modal.css', __FILE__));
 		wp_enqueue_style('widgets-css', plugins_url('back-end/assets/css/widgets.css', __FILE__));
 		wp_enqueue_style('widgets-codemirrordark-css', plugins_url('back-end/assets/css/codemirror-dark.css', __FILE__));
