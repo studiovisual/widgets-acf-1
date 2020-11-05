@@ -261,7 +261,7 @@
 	margin-left: 10px;
 }
 
-.acf-flexible-content .values {
+.acf-flexible-content > .values {
 	margin-left: -12px !important;
 	margin-right: -12px !important;
 	display: flex;

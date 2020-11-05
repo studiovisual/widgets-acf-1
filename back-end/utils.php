@@ -368,10 +368,7 @@ Class Utils {
 				$style_attr['padding_left'] = 'padding-left: ' . $layout['attr']['layout_padding']['layout_padding_left'] . 'px;';
 
 			if($layout['attr']['layout_background'] == 'image' && !empty($layout['attr']['layout_background_image'])): 
-				if(is_array($img_bg))
-					$img_bg = $layout['attr']['layout_background_image']['sizes']['full'];
-				else
-					$img_bg = wp_get_attachment_url($layout['attr']['layout_background_image']);
+				$img_bg = wp_get_attachment_url($layout['attr']['layout_background_image']);
 
 				$style_bg['layout_background_image'] = 'background-image: url(' . $img_bg . ');';
 				$style_bg['background_size'] = 'background-size: cover;';

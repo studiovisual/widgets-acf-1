@@ -548,7 +548,7 @@
 
         // setTimeout(() => {
             $layout.find('textarea:not(.editor-initialized), input[type="text"]:not(.wp-color-picker):not(.widgets-acf-flexible-control-title):not(.editor-initialized)').each(function() {
-                if(!jQuery(this).closest('.acf-color-picker')[0] && !jQuery(this).closest('.acf-clone')[0]) {
+                if(!$(this).closest('.acf-color-picker')[0] && !$(this).closest('.acf-clone')[0] && !$(this).parents('.acf-relationship')) {
                     var $input = $(this);
                     var id_div = $input.attr('name') + (new Date().getTime());
                     var isTextInput = $input.attr('type') == 'text';

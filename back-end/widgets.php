@@ -4,7 +4,7 @@
 Class Widgets {
 
 	public function __construct() {
-		add_filter('wp_insert_post_data', array($this, 'filter_post_data'), '99', 1);
+		add_filter('wp_insert_post_data', array($this, 'filter_post_data'), '99', 2);
 		require("acf/widgets-base.php");
 
 		$this->setWidgetsList();
@@ -12,7 +12,6 @@ Class Widgets {
 
 	private function setWidgetsList() {
 		global $widgets;
-		global $post_id;
 		
 		if(!function_exists('acf_add_local_field_group'))
 			return;
@@ -31,6 +30,7 @@ Class Widgets {
 		$widget_adm = $this->getPagesSelected();
 
 		Painel::field_color($widget_adm['taxonomy']);
+		session_start();
 
 		if(is_admin()):
 			// Define widget em post_type selecionados
@@ -44,7 +44,7 @@ Class Widgets {
 						'value' => $post_type,
 					);
 
-					$post_id = $_GET['post'];
+					$_SESSION['session_' . $_GET['post']] = true;
 				endif;
 			endif;
 
@@ -57,16 +57,13 @@ Class Widgets {
 						'value' => $_GET['post'],
 					);
 
-					$post_id = $_GET['post'];
+					$_SESSION['session_' . $_GET['post']] = true;
 				endif;
 			endif;
 
 			// Define widget em modelos selecionadas
 			if(!empty($widget_adm['models']) && !empty($_GET['post'])):
 				$current_model = get_post_meta($_GET['post'], '_wp_page_template', true);
-			
-				if(empty($current_model))
-					$current_model = 'default';
 
 				if(in_array($current_model, $widget_adm['models'])):
 					$acf_base['location'][][] = array(
@@ -75,7 +72,7 @@ Class Widgets {
 						'value' => $current_model,
 					);
 
-					$post_id = $_GET['post'];
+					$_SESSION['session_' . $_GET['post']] = true;
 				endif;
 			endif;
 
@@ -166,11 +163,12 @@ Class Widgets {
 		return $widgets;
 	}
 
-
-	function filter_post_data($data) {
-		// global $post_id;
-		// $data['post_content'] = '[acf_widgets id="' . $post_id . '"]';
-		$data['post_content'] = '[acf_widgets]';
+	function filter_post_data($data, $post) {
+		session_start();
+		if(isset($_SESSION['session_' . $post['ID']])):
+			$data['post_content'] = '[acf_widgets]';
+			unset($_SESSION['session_' . $post['ID']]);
+		endif;
 
 		return $data;
 	}
