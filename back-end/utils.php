@@ -319,7 +319,6 @@ Class Utils {
 		$html = '';
 		$css_widgets = '';
 		$js_widgets = '';
-		$layout_count = 1;
 		
 		foreach($layout_content as $layout):
 			$style_attr = array();
@@ -378,7 +377,7 @@ Class Utils {
 			$html .= '<div class="row' . $align . ($layout['attr']['layout_width'] != 'container' ? ' mx-0' : '') .'">';
 			
 			$count_column = 0;
-			$widget_count = 1;
+			$widget_id = uniqid(rand());
 			
 			foreach($layout as $w_content):
 				if(!array_key_exists('content', $w_content))
@@ -421,7 +420,7 @@ Class Utils {
 					$style = "style=\"{$style}\"";
 				
 				$html .= sprintf(
-					"<div id=\"{$widget_name}-{$layout_count}-{$widget_count}\" class=\"widget-acf {$widget_name} {$columns}%s\"%s>", 
+					"<div id=\"{$widget_name}-{$widget_id}\" class=\"widget-acf {$widget_name} {$columns}%s\"%s>", 
 					empty($w_content['class']) ? "" : " " . $w_content['class'], 
 					empty($style) ? "" : " " . $style
 				);
@@ -455,15 +454,13 @@ Class Utils {
 				
 				$css_widgets .= self::enqueueStyle($dir_widget, $url_widget, $widget_name);
 				$js_widgets .= self::enqueueScript($dir_widget, $url_widget, $widget_name);
-				
-				$widget_count++;
+
 				$count_column++;
 			endforeach;
 				
 			$html .= '</div>';
 			$html .= '</div>';
 			$html .= '</section>';
-			$layout_count++;
 		endforeach;
 			
 		$url_widgets = get_template_directory();
