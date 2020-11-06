@@ -106,7 +106,7 @@ class WidgetsACF {
 	}
 	
 	public function enqueueFront() {
-		Utils::getCodes();
+		// Utils::getCodes();
 
 		if(!empty(get_field('widgets_acf_show_bootstrap', 'options'))):
 			wp_enqueue_style( 'front_end_widget_acf_bootstrap_css', 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css');

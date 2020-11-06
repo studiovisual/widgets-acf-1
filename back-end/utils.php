@@ -248,36 +248,6 @@ Class Utils {
                 $widgets[$widget_name]['name'] = $widget_label['title'];
             endif;
         endforeach;
-        
-        $url_widgets = get_template_directory();
-
-        if(get_field('widgets_acf_enquee_css', 'options')):
-            // css widgets
-            require  plugin_dir_path(__FILE__) . "../scssphp/scss.inc.php";
-            $scss = new scssc();
-            $scss->setFormatter("scss_formatter_compressed");
-            $css_widgets = $scss->compile($css_widgets);
-            $dir_css_widget = $url_widgets . '/widgets_acf.css';
-            $fp = fopen($dir_css_widget, 'w');
-            fwrite($fp, $css_widgets);
-            fclose($fp);
-
-            // Enqueue style
-            wp_enqueue_style("widget/widgets_acf", get_template_directory_uri() . '/widgets_acf.css', array(), false, 'all');
-        endif;
-
-        if(get_field('widgets_acf_enquee_js', 'options')):
-            // js widgets
-            require plugin_dir_path(__FILE__) . '../JShrink/Minifier.php';
-            // $js_widgets = \JShrink\Minifier::minify($js_widgets);
-            $dir_js_widget = $url_widgets . '/widgets_acf.js';
-            $fp = fopen($dir_js_widget, 'w');
-            fwrite($fp, $js_widgets);
-            fclose($fp);
-
-            // Enqueue script
-            wp_enqueue_script("widget/widgets_acf", get_template_directory_uri() . '/widgets_acf.js', array(), false, true);
-        endif;
 
         return $widgets;
     }
@@ -497,7 +467,35 @@ Class Utils {
 		endforeach;
 			
 		$url_widgets = get_template_directory();
-			
+
+        if(get_field('widgets_acf_enquee_css', 'options')):
+            // css widgets
+            require  plugin_dir_path(__FILE__) . "../scssphp/scss.inc.php";
+            $scss = new scssc();
+            $scss->setFormatter("scss_formatter_compressed");
+            $css_widgets = $scss->compile($css_widgets);
+            $dir_css_widget = $url_widgets . '/widgets_acf.css';
+            $fp = fopen($dir_css_widget, 'w');
+            fwrite($fp, $css_widgets);
+            fclose($fp);
+
+            // Enqueue style
+            wp_enqueue_style("widget/widgets_acf", get_template_directory_uri() . '/widgets_acf.css', array(), false, 'all');
+        endif;
+
+        if(get_field('widgets_acf_enquee_js', 'options')):
+            // js widgets
+            require plugin_dir_path(__FILE__) . '../JShrink/Minifier.php';
+            $js_widgets = \JShrink\Minifier::minify($js_widgets);
+            $dir_js_widget = $url_widgets . '/widgets_acf.js';
+            $fp = fopen($dir_js_widget, 'w');
+            fwrite($fp, $js_widgets);
+            fclose($fp);
+
+            // Enqueue script
+            wp_enqueue_script("widget/widgets_acf", get_template_directory_uri() . '/widgets_acf.js', array(), false, true);
+        endif;
+
 		return $html;
 	}
 
