@@ -482,8 +482,8 @@ Class Utils {
 
         if(get_field('widgets_acf_enquee_js', 'options')):
             // js widgets
-            require_once(plugin_dir_path(__FILE__) . '../JShrink/Minifier.php');
-			$js_widgets = \JShrink\Minifier::minify($js_widgets);
+            // require_once(plugin_dir_path(__FILE__) . '../JShrink/Minifier.php');
+			// $js_widgets = \JShrink\Minifier::minify($js_widgets);
             $dir_js_widget = $url_widgets . '/widgets_acf.js';
             $fp = fopen($dir_js_widget, 'w');
             fwrite($fp, $js_widgets);
