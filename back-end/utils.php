@@ -318,7 +318,7 @@ Class Utils {
 	static function getTemplates($layout_content) {
 		$html = '';
 		$css_widgets = '';
-		$js_widgets = '';
+		global $js_widgets;
 		
 		foreach($layout_content as $layout):
 			$style_attr = array();
@@ -480,17 +480,23 @@ Class Utils {
             wp_enqueue_style("widget/widgets_acf", get_template_directory_uri() . '/widgets_acf.css', array(), false, 'all');
         endif;
 
-        if(get_field('widgets_acf_enquee_js', 'options')):
+		if(get_field('widgets_acf_enquee_js', 'options')):
             // js widgets
             // require_once(plugin_dir_path(__FILE__) . '../JShrink/Minifier.php');
 			// $js_widgets = \JShrink\Minifier::minify($js_widgets);
-            $dir_js_widget = $url_widgets . '/widgets_acf.js';
-            $fp = fopen($dir_js_widget, 'w');
+
+			$dir_js_widget = $url_widgets . '/widgets_acf.js';
+	
+			if(wp_script_is('widget/widgets_acf')):
+				wp_dequeue_script('widget/widgets_acf');
+			endif;
+	
+    		$fp = fopen($dir_js_widget, 'w');        
             fwrite($fp, $js_widgets);
-            fclose($fp);
+			fclose($fp);
 
             // Enqueue script
-            wp_enqueue_script("widget/widgets_acf", get_template_directory_uri() . '/widgets_acf.js', array(), false, true);
+			wp_enqueue_script("widget/widgets_acf", get_template_directory_uri() . '/widgets_acf.js', array(), false, true);
         endif;
 
 		return $html;
