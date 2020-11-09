@@ -377,7 +377,6 @@ Class Utils {
 			$html .= '<div class="row' . $align . ($layout['attr']['layout_width'] != 'container' ? ' mx-0' : '') .'">';
 			
 			$count_column = 0;
-			$widget_id = uniqid(rand());
 			
 			foreach($layout as $w_content):
 				if(!array_key_exists('content', $w_content))
@@ -420,7 +419,7 @@ Class Utils {
 					$style = "style=\"{$style}\"";
 				
 				$html .= sprintf(
-					"<div id=\"{$widget_name}-{$widget_id}\" class=\"widget-acf {$widget_name} {$columns}%s\"%s>", 
+					"<div class=\"widget-acf {$widget_name} {$columns}%s\"%s>", 
 					empty($w_content['class']) ? "" : " " . $w_content['class'], 
 					empty($style) ? "" : " " . $style
 				);
