@@ -427,6 +427,7 @@ Class Utils {
 				ob_start();
 				
 				$fields = $w_content['content'];
+				global $widget;
 				$widget = new stdClass();
 				$widget->fields = self::parseFields($fields);
 
