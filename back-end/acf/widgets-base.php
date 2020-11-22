@@ -63,7 +63,15 @@ Class AcfWidget {
 					),
 				)
 			),
-			'location' => array (),
+			'location' => array(
+				array(
+					array(
+						'param' => 'post_type',
+						'operator' => '==',
+						'value' => 'widget-reusable',
+					),	
+				),
+			),
 			'menu_order' => 0,
 			'position' => 'acf_after_title',
 			'style' => 'default',

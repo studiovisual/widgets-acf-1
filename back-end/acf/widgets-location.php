@@ -23,7 +23,7 @@ class WidgetsLocation extends ACF_Location {
         
         
         if(!is_dir($path)){
-            $path = plugin_dir_path(__FILE__) . '../../more-widgets-templates';
+            $path = plugin_dir_path(__FILE__) . '../../widgets-templates';
         }
         
         if(!is_dir($path))

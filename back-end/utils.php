@@ -17,7 +17,7 @@ Class Utils {
 					get_template_directory_uri() . '/views/widgets-templates/' :
 					get_template_directory_uri() . '/widgets-templates/';
 		else:
-			$url = plugins_url('/more-widgets-templates/' , dirname(__FILE__));
+			$url = plugins_url('/widgets-templates/' , dirname(__FILE__));
 		endif;
 
 		$name = basename(dirname($widgetController));
@@ -394,7 +394,7 @@ Class Utils {
 				endif;
 				
 				if(!is_dir($dir_widget)):
-					$dir_widget = plugin_dir_path(__FILE__) . "../more-widgets-templates/{$widget_name}";
+					$dir_widget = plugin_dir_path(__FILE__) . "../widgets-templates/{$widget_name}";
 					$plugin_widget = true;
 				endif;
 				

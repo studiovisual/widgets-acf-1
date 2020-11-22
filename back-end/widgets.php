@@ -7,10 +7,13 @@ Class Widgets {
 		add_filter('wp_insert_post_data', array($this, 'filter_post_data'), '99', 2);
 		require("acf/widgets-base.php");
 
-		$this->setWidgetsList();
+		if(is_admin())
+			add_action('current_screen', array($this, 'setWidgetsList'));
+		else
+			$this->setWidgetsList();
 	}
 
-	private function setWidgetsList() {
+	public function setWidgetsList() {
 		global $widgets;
 		
 		if(!function_exists('acf_add_local_field_group'))
@@ -22,29 +25,31 @@ Class Widgets {
 				$this->getWidgets(get_template_directory() . '/views/widgets-templates') :
 				$this->getWidgets(get_template_directory() . '/widgets-templates');
 
-		if(empty($directory_widgets))
-			$directory_widgets = $this->getWidgets(plugin_dir_path(__FILE__) . '../more-widgets-templates');
-
-		$widgets = $directory_widgets;
+		$widgets = array_merge($directory_widgets, $this->getWidgets(plugin_dir_path(__FILE__) . '../widgets-templates'));
+		uasort($widgets, array($this, 'sortWidgets'));
 
 		$widget_adm = $this->getPagesSelected();
 
 		Painel::field_color($widget_adm['taxonomy']);
-		session_start();
 
 		if(is_admin()):
+			session_start();
+			global $current_screen;
+
+			if($current_screen->post_type == 'widget-reusable' && !empty($_GET['post']))
+				$_SESSION['session_' . $_GET['post']] = true;
+
 			// Define widget em post_type selecionados
-			if(!empty($widget_adm['post_type']) && !empty($_GET['post'])):
-				$post_type = get_post_type($_GET['post']);
-				
-				if(in_array($post_type, $widget_adm['post_type'])):
+			if(!empty($widget_adm['post_type']) && $current_screen->base == 'post'):	
+				if(in_array($current_screen->post_type, $widget_adm['post_type'])):
 					$acf_base['location'][][] = array(
 						'param' => 'post_type',
 						'operator' => '==',
-						'value' => $post_type,
+						'value' => $current_screen->post_type,
 					);
 
-					$_SESSION['session_' . $_GET['post']] = true;
+					if(!empty($_GET['post']))
+						$_SESSION['session_' . $_GET['post']] = true;
 				endif;
 			endif;
 
@@ -77,7 +82,7 @@ Class Widgets {
 			endif;
 
 			// Define widget em categorias selecionadas
-			if(!empty($widget_adm['taxonomy']) && !empty($_GET['taxonomy'])):
+			if(!empty($widget_adm['taxonomy']) && !empty($_GET['taxonomy']) && !empty($_GET['tag_ID'])):
 				if(in_array($_GET['taxonomy'], $widget_adm['taxonomy'])):
 					$acf_base['location'][][] = array(
 						'param' => 'taxonomy',
@@ -99,6 +104,10 @@ Class Widgets {
 		endforeach;
 
 		acf_add_local_field_group($acf_base);
+	}
+
+	public function sortWidgets($a, $b) {
+		return strcmp($a['data']['title'], $b['data']['title']);
 	}
 
 	public function getPagesSelected() {
@@ -164,7 +173,7 @@ Class Widgets {
 	}
 
 	function filter_post_data($data, $post) {
-		if(isset($_SESSION['session_' . $post['ID']])):
+		if(isset($_SESSION['session_' . $post['ID']]) || $post['post_type'] == 'widget-reusable'):
 			$data['post_content'] = '[acf_widgets id="' . $post['ID'] . '"]';
 			unset($_SESSION['session_' . $post['ID']]);
 		endif;

@@ -61,6 +61,7 @@ class WidgetsACF {
 		include_once('back-end/acf/widgets-location.php');
 		include_once('back-end/widgets.php');
 		include_once('back-end/painel.php');
+		include_once('back-end/widget-reusable.php');
 
 		if(is_admin()):
 			include_once('back-end/acf/image.php');
@@ -77,6 +78,7 @@ class WidgetsACF {
 		$plugin_nome = 'Widgets ACF';
 		
 		new Widgets();
+		new WidgetReusable();
 
 		if(is_admin())
 			new Admin();
