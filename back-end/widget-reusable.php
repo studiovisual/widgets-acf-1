@@ -29,6 +29,7 @@ class WidgetReusable {
             'title',
             'editor',
             'author',
+            'thumbnail',
         ],
         'menu_icon' => 'dashicons-update-alt',
     ];

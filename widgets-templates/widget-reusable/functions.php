@@ -23,6 +23,9 @@ acf_add_local_field_group(array(
             'filters' => array(
                 'search',
             ),
+            'elements' => array(
+                'featured_image',
+            ),
         ),
     ),
     'location' => array (

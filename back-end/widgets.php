@@ -7,13 +7,10 @@ Class Widgets {
 		add_filter('wp_insert_post_data', array($this, 'filter_post_data'), '99', 2);
 		require("acf/widgets-base.php");
 
-		if(is_admin())
-			add_action('current_screen', array($this, 'setWidgetsList'));
-		else
-			$this->setWidgetsList();
+		$this->setWidgetsList();
 	}
 
-	public function setWidgetsList() {
+	private function setWidgetsList() {
 		global $widgets;
 		
 		if(!function_exists('acf_add_local_field_group'))
@@ -34,18 +31,19 @@ Class Widgets {
 
 		if(is_admin()):
 			session_start();
-			global $current_screen;
 
-			if($current_screen->post_type == 'widget-reusable' && !empty($_GET['post']))
+			if(!empty($_GET['post']) && get_post_type() == 'widget-reusable')
 				$_SESSION['session_' . $_GET['post']] = true;
 
 			// Define widget em post_type selecionados
-			if(!empty($widget_adm['post_type']) && $current_screen->base == 'post'):	
-				if(in_array($current_screen->post_type, $widget_adm['post_type'])):
+			if(!empty($widget_adm['post_type']) && !empty($_GET['post'])):
+				$post_type = get_post_type($_GET['post']);
+
+				if(in_array($post_type, $widget_adm['post_type'])):
 					$acf_base['location'][][] = array(
 						'param' => 'post_type',
 						'operator' => '==',
-						'value' => $current_screen->post_type,
+						'value' => $post_type,
 					);
 
 					if(!empty($_GET['post']))
