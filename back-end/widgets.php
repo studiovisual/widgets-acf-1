@@ -65,7 +65,7 @@ Class Widgets {
 			endif;
 
 			// Define widget em modelos selecionadas
-			if(!empty($widget_adm['models']) && !empty($_GET['post'])):
+			if(!empty($widget_adm['models']) && !empty($_GET['post']) && get_post_type($_GET['post']) == 'page'):
 				$current_model = get_post_meta($_GET['post'], '_wp_page_template', true);
 
 				if(in_array($current_model, $widget_adm['models'])):
