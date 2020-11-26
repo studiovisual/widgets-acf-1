@@ -57,6 +57,8 @@ Class WidgetTemplate {
 		$class .= empty($fields['display_tablet_'.$layout_widget.'_key']) ? ' d-md-none' : ' d-md-block';
 		$class .= empty($fields['display_desktop_'.$layout_widget.'_key']) ? ' d-lg-none' : ' d-lg-block';
 
+		$class .= !empty($fields['class_'.$layout_widget.'_key']) ? ' ' . $fields['class_'.$layout_widget.'_key'] : '';
+
 		return trim($class);
 	}
 

@@ -50,6 +50,14 @@ $sub_fields[] = array(
 );
 
 $sub_fields[] = array(
+	'key' => 'class_' . $prefixed_widget,
+	'label' => 'Classes',
+	'name' => 'class',
+	'type' => 'text',
+	'prepend' => '.',
+);
+
+$sub_fields[] = array(
 	'key' => 'margin_' . $prefixed_widget,
 	'label' => 'Margin',
 	'name' => 'margin',
