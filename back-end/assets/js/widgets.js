@@ -495,8 +495,7 @@
     };
 
     acf.add_action('append', function($el) {
-        var $context = $($el.context);
-        if($el.hasClass('layout') || $context.hasClass('acf-field-widgets'))
+        if(!$el.parents('.widgets-acf-modal-content').length)
             return;
 
         $el.find('textarea:not(.editor-initialized), input[type="text"]:not(.wp-color-picker):not(.widgets-acf-flexible-control-title)').each(function() {
