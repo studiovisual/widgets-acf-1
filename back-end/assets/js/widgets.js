@@ -546,8 +546,8 @@
         ];
 
         // setTimeout(() => {
-            $layout.find('textarea:not(.editor-initialized), input[type="text"]:not(.wp-color-picker):not(.widgets-acf-flexible-control-title):not(.editor-initialized)').each(function() {
-                if(!$(this).closest('.acf-color-picker')[0] && !$(this).closest('.acf-clone')[0] && $(this).parents('.acf-relationship').length === 0 && $(this).parents('[data-name="class"]').length === 0) {
+            $layout.find('textarea:not(.editor-initialized):not([readonly="readonly"]), input[type="text"]:not(.wp-color-picker):not(.widgets-acf-flexible-control-title):not(.editor-initialized):not([readonly="readonly"])').each(function() {
+                if(!$(this).closest('.acf-color-picker')[0] && !$(this).closest('.acf-clone')[0] && $(this).parents('.acf-relationship').length === 0 && $(this).parents('[data-name="class"]').length === 0 && $(this).parents('.no-inline-editor').length === 0) {
                     var $input = $(this);
                     var id_div = $input.attr('name') + (new Date().getTime());
                     var isTextInput = $input.attr('type') == 'text';
