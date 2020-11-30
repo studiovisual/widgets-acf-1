@@ -9,8 +9,5 @@ $posts = get_posts(
 );
 
 foreach($posts as $post):
-    setup_postdata($post);
-    the_content();
+    echo do_shortcode($post->post_content);
 endforeach;
-
-wp_reset_postdata();
