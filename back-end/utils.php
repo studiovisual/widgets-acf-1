@@ -436,6 +436,8 @@ Class Utils {
 					$widget->layout[str_replace('layout_', '', $key)] = $layout_attr;
 					unset($widget->layout[$key]);
 				endforeach;
+
+				$widget = apply_filters("widgetsacf_{$widget_name}_data", $widget);
 				
 				if(function_exists('\App\template') && !$plugin_widget):
 					$template = "widgets-templates.{$widget_name}.index";
