@@ -491,6 +491,7 @@ input.widgets-acf-flexible-control-title{
 
 /* .acf-field-widgets .acf-flexible-content .layout .ckeditor_inline { */
 .ckeditor_inline {
+	background-color: #b3b3b3;
 	border: 1px #ccc solid;
 	font-size: 14px;
 	font-family: Arial;

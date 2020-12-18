@@ -2,6 +2,7 @@
     if(typeof acf === 'undefined')
         return;
 
+    CKEDITOR.disableAutoInline = true;
     CKEDITOR.style.prototype.buildPreviewOriginal = CKEDITOR.style.prototype.buildPreview;
     CKEDITOR.style.prototype.buildPreview = function(label) {
         var result = this.buildPreviewOriginal(label);
