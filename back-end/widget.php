@@ -165,7 +165,13 @@ class Widget extends acf_field_flexible_content {
 
         <div class="clones">
             <?php foreach($layouts as $layout):
-                $this->render_layout($field, $layout, 'acfcloneindex', array());
+                $div = array(
+                    'class'			=> 'layout acf-clone',
+                    'data-id'		=> 'acfcloneindex',
+                    'data-layout'	=> $layout['name']
+                );
+                
+                echo '<div ' . acf_esc_attr($div) . '></div>';
             endforeach; ?>
         </div>
         
