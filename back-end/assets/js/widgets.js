@@ -563,6 +563,7 @@
 
                     CKEDITOR.disableAutoInline = true;
                     CKEDITOR.config.allowedContent = true;
+                    CKEDITOR.config.line_height = '0.1;0.2;0.3;0.4;0.5;0.6;0.7;0.8;0.9;1;1.1;1.2;1.3;1.4;1.5;1.6;1.7;1.8;1.9;2';
 
                     // CKEDITOR.config.allowedContent = {
                     //     $1: {
@@ -744,6 +745,113 @@
     //     // flexible.editLayoutTitleToggle(e, $el);
     // }
 
+    /*
+     * Spawn
+     */
+    acf.addAction('new_field/type=flexible_content', function(flexible) {
+        // Vars
+        var $clones = flexible.$clones();
+        var $layouts = flexible.$layouts();
+        
+        // Merge
+        var $all_layouts = $.merge($layouts, $clones);
+        
+        // Do Actions
+        $layouts.each(function() {
+            var $layout = $(this);
+            var $name = $layout.data('layout');
+            
+            acf.doAction('acfe/flexible/layouts', $layout, flexible);
+            acf.doAction('acfe/flexible/layout/name=' + $name, $layout, flexible);
+        });
+        
+        // ACFE: 1 layout available - OneClick
+        if($clones.length === 1) {
+            // Remove native ACF Tooltip action
+            flexible.removeEvents({'click [data-name="add-layout"]': 'onClickAdd'});
+            
+            // Add ACF Extended Modal action
+            flexible.addEvents({'click [data-name="add-layout"]': 'acfeOneClick'});
+        }
+        
+        flexible.addEvents({'click .acfe-fc-placeholder': 'onClickCollapse'});
+        flexible.addEvents({'click .acfe-flexible-opened-actions > a': 'onClickCollapse'});
+        
+        // Flexible: Ajax
+        // if(flexible.has('acfeFlexibleAjax')) {
+            flexible.add = function(args) {
+                // Get Flexible
+                var flexible = this;
+                
+                // defaults
+                args = acf.parseArgs(args, {
+                    layout: '',
+                    before: false
+                });
+                
+                // validate
+                if(!this.allowAdd())
+                    return false;
+
+                // ajax
+                $.ajax({
+                    url: acf.get('ajaxurl'),
+                    data: acf.prepareForAjax({
+                        action: 	'widgets_acf/flexible/models',
+                        field_key: 	this.get('key'),
+                        layout:		args.layout,
+                    }),
+                    dataType: 'html',
+                    type: 'post',
+                    beforeSend: function() {
+                        $('body').addClass('-loading');
+                    },
+                    success: function(html) {
+                        if(html) {
+                            var $layout = $(html);
+                            var uniqid = acf.uniqid();
+                            
+                            var search = 'acf[' + flexible.get('key') + '][acfcloneindex]';
+                            var replace = flexible.$control().find('> input[type=hidden]').attr('name') + '[' + uniqid + ']';
+                            
+                            // add row
+                            var $el = acf.duplicate({
+                                target: $layout,
+                                search: search,
+                                replace: replace,
+                                append: flexible.proxy(function($el, $el2) {
+                                    // append
+                                    if(args.before)
+                                        args.before.before($el2);
+                                    else
+                                        flexible.$layoutsWrap().append($el2);
+                                    
+                                    // enable 
+                                    acf.enable($el2, flexible.cid);
+                                    
+                                    // render
+                                    flexible.render();
+                                })
+                            });
+                            
+                            // Fix data-id
+                            $el.attr('data-id', uniqid);
+                            
+                            // trigger change for validation errors
+                            flexible.$input().trigger('change');
+                            
+                            // return
+                            return $el;
+                        }
+                    },
+                    'complete': function() {
+                        $('body').removeClass('-loading');
+                        window.lazyLoadInstance.update();
+                    }
+                });
+            };
+        // }
+    });
 
 
     model.setAjaxFonts();
