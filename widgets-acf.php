@@ -24,7 +24,8 @@ class WidgetsACF {
 	}
 
 	public function enqueue() {
-		wp_enqueue_script('widgets-ckeditor-js', plugins_url('back-end/assets/js/ckeditor/ckeditor.js', __FILE__));
+		wp_enqueue_media();
+		wp_enqueue_editor();
 		wp_enqueue_script('widgets-lazyload-js', plugins_url('back-end/assets/js/lazyload.min.js', __FILE__));
 		wp_enqueue_script('widgets-main-js', plugins_url('back-end/assets/js/main.js', __FILE__));
 
@@ -32,9 +33,11 @@ class WidgetsACF {
 		// wp_enqueue_script('widgets-modal-js', plugins_url('back-end/assets/js/modal.js', __FILE__));
 		// wp_enqueue_script('widgets-js', plugins_url('back-end/assets/js/widgets.js', __FILE__));
 
-		wp_enqueue_style('widgets-modal-css', plugins_url('back-end/assets/css/modal.css', __FILE__));
-		wp_enqueue_style('widgets-css', plugins_url('back-end/assets/css/widgets.css', __FILE__));
 		wp_enqueue_style('widgets-codemirrordark-css', plugins_url('back-end/assets/css/codemirror-dark.css', __FILE__));
+		wp_enqueue_style('widgets-main-css', plugins_url('back-end/assets/css/main.css', __FILE__));
+
+		// wp_enqueue_style('widgets-modal-css', plugins_url('back-end/assets/css/modal.css', __FILE__));
+		// wp_enqueue_style('widgets-css', plugins_url('back-end/assets/css/widgets.css', __FILE__));
 
 		$cm_settings['codeEditor'] = wp_enqueue_code_editor(array('type' => 'text/css'));
 		wp_localize_script('jquery', 'cm_settings', $cm_settings);
