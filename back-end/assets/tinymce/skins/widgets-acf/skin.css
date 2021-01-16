@@ -1144,8 +1144,8 @@ body .mce-abs-layout-item,
 
 .mce-btn.mce-active,
 .mce-btn.mce-active:hover {
-	background-color: #383838;
-	border-color: #191919
+	background-color: #383838 !important;
+	border-color: #191919 !important;
 }
 
 .mce-btn:active {
