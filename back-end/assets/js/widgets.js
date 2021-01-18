@@ -1,29 +1,14 @@
 (function ($) {
     if(typeof acf === 'undefined')
         return;
-
-    CKEDITOR.disableAutoInline = true;
-    CKEDITOR.style.prototype.buildPreviewOriginal = CKEDITOR.style.prototype.buildPreview;
-    CKEDITOR.style.prototype.buildPreview = function(label) {
-        var result = this.buildPreviewOriginal(label);
-        
-        var match = /^(.*)font-size:(\d+)px(.*)$/.exec(result);
-        if(match)
-            result = match[1] + 'font-size: 12px' + match[3];
-
-        var match = /^(.*)line-height:(\d+)(.*)$/.exec(result);
-        if(match)
-            result = match[1] + 'line-height: 1' + match[3];
-
-        return result;
-    };
         
     /*
     * Init
     */
     var flexible = acf.getFieldType('flexible_content');
     var model = flexible.prototype;
-    var fonts = '';
+    var fonts = [];
+    var editorSettings = {};
 
     /*
     * Actions
@@ -130,16 +115,16 @@
         var $handle = $layout.find('> .acf-fc-layout-handle');
         var $layout_order = $handle.find('> .acf-fc-layout-order').outerHTML();
         var $layout_title = $handle.find('.widgets-acf-layout-title-text').text();
-        
+
         // Open modal
         modal.open($modal, {
             title: $layout_order + ' ' + $layout_title,
             // footer: close,
             onOpen: function() {
                 flexible.openLayout($layout);
-                model.setCkeditorInline($layout);
+                model.setEditorInline($layout);
             },
-        });
+        });    
     };
 
     // Layout: Clone
@@ -468,6 +453,8 @@
         // remove classes
         $el2.removeClass('acf-clone');
         $el2.find('.ui-sortable').removeClass('ui-sortable');
+        $el2.find('.editor-initialized').removeClass('editor-initialized');
+        $el2.find('.widgets-acf-editor').parents('.wp-editor-wrap').first().remove();
 
         // after
         // - allow acf to modify DOM
@@ -496,103 +483,203 @@
     };
 
     acf.add_action('append', function($el) {
-        if(!$el.parents('.widgets-acf-modal-content').length)
+        if(!$el.parents('#acf-group_widgets_acf').length)
             return;
+        
+        $el.find('.widgets-acf-preview').remove();
+        $el.find('.editor-initialized').removeClass('editor-initialized');
 
-        $el.find('textarea:not(.editor-initialized), input[type="text"]:not(.wp-color-picker):not(.widgets-acf-flexible-control-title)').each(function() {
+        $el.find('.widgets-acf-editor').each(function() {
             var $element = $(this);
 
-            $element.removeClass('editor-initialized');
-            $element.next('.ckeditor_inline').remove();
+            $element.parents('.wp-editor-wrap').first().remove();
         });
+        
 
-        model.setCkeditorInline($el);
+        if($el.parents('.widgets-acf-modal-content').length)
+            model.setEditorInline($el);
     });
 
-    model.setCkeditorInline = function($layout) { 
-        var stylesSet = [];
+    model.setEditorSettings = function() { 
+        var fontWeight = [];
         var fontSizes = '';
+        var lineHeight = [];
+        var letterSpacing = [];
+        var domain = (new URL(window.location));
 
         for(let index = 1; index < 10; index ++) {
-            stylesSet.push({
-                name: index + '00',
-                element: 'font',
-                styles: {
-                    'font-weight': index * 100,
-                },
+            fontWeight.push({
+                title: index.toString() + '00',
+                inline: 'span',
+                styles: { 'font-weight': (index * 100).toString() },
             })
         }
 
-        for(let index = 8; index < 101; index ++)
-            fontSizes += index + 'px;';
+        for(let index = 0.1; index < 2.1; index += 0.1) {
+            lineHeight.push({
+                title: index.toFixed(1).toString(),
+                inline: 'span',
+                styles: { 'line-height': index.toFixed(1), display: 'inline-block' }
+            });
+        }
 
-        var toolbarText = [
-            { name: 'document', groups: [ 'mode' ] },
-            { name: 'basicstyles', groups: [ 'colors', 'basicstyles', 'cleanup' ] },
-            { name: 'list', groups: [ 'list', 'align' ] },
-            { name: 'links', groups: [ 'links' ] },
-            '/',
-            { name: 'styles', groups: [ 'styles' ] },
-            { name: 'others', groups: [ 'others' ] },
-        ];
-        var toolbarTextArea = [
-            { name: 'document', groups: [ 'mode' ] },
-            { name: 'basicstyles', groups: [ 'colors', 'basicstyles', 'cleanup' ] },
-            { name: 'list', groups: [ 'list', 'align' ] },
-            { name: 'links', groups: [ 'links' ] },
-            { name: 'insert', groups: [ 'insert', 'blocks' ] },
-            '/',
-            { name: 'styles', groups: [ 'styles' ] },
-            { name: 'others', groups: [ 'others' ] },
-        ];
+        for(let index = 8; index <= 100; index++)
+            fontSizes += index + 'px ';
 
-        // setTimeout(() => {
-            $layout.find('textarea:not(.editor-initialized):not([readonly="readonly"]), input[type="text"]:not(.wp-color-picker):not(.widgets-acf-flexible-control-title):not(.editor-initialized):not([readonly="readonly"])').each(function() {
-                if(!$(this).closest('.acf-color-picker')[0] && !$(this).closest('.acf-clone')[0] && $(this).parents('.acf-relationship').length === 0 && $(this).parents('[data-name="class"]').length === 0 && $(this).parents('.no-inline-editor').length === 0) {
-                    var $input = $(this);
-                    var id_div = $input.attr('name') + (new Date().getTime());
-                    var isTextInput = $input.attr('type') == 'text';
+        for(let index = -10; index <= 10; index++) {
+            letterSpacing.push({
+                title: index.toString() + 'px',
+                inline: 'span',
+                styles: { 'letter-spacing': index.toString() + 'px ' },
+            });
+        }
+
+        editorSettings = {
+            tinymce: {
+                wpautop: false,
+                forced_root_block: '',
+                skin: 'widgets-acf',
+                skin_url: `${domain.origin}/wp-content/plugins/widgets-acf/back-end/assets/tinymce/skins/widgets-acf`,
+                formats: {
+                    alignleft: [
+                        {selector: 'p, h1, h2, h3, h4, h5, h6, td, th, div, ul, ol, li, span', inline: 'span', block: 'span', styles: {display: 'block', textAlign: 'left' }},
+                    ],
+                    aligncenter: [
+                        {selector: 'p, h1, h2, h3, h4, h5, h6, td, th, div, ul, ol, li, span', inline: 'span', block: 'span', styles: {display: 'block', textAlign: 'center' }},
+                    ],
+                    alignright: [
+                        {selector: 'p, h1, h2, h3, h4, h5, h6, td, th, div, ul, ol, li, span', inline: 'span', block: 'span', styles: {display: 'block', textAlign: 'right' }},
+                    ],
+                    alignfull: [
+                        {selector: 'p, h1, h2, h3, h4, h5, h6, td, th, div, ul, ol, li, span', inline: 'span', block: 'span', styles: {display: 'block', textAlign: 'justify' }},
+                    ],
+                    strikethrough: {inline: 'del' }
+                },
+                style_formats: [
+                    {
+                        title: 'Altura da linha',
+                        items: lineHeight,
+                    },
+                    {
+                        title: 'Espaçamento entre letras',
+                        items: letterSpacing,
+                    },
+                    {
+                        title: 'Peso da fonte',
+                        items: fontWeight,
+                    },
+                    {
+                        title: 'Transformação',
+                        items: [
+                            {
+                                title: 'Caixa alta',
+                                inline: 'span',
+                                styles: { 'text-transform': 'uppercase', display: 'inline-block' }
+                            },
+                            {
+                                title: 'Caixa baixa',
+                                inline: 'span',
+                                styles: { 'text-transform': 'lowercase', display: 'inline-block' }
+                            },
+                            {
+                                title: 'Capitalizada',
+                                inline: 'span',
+                                styles: { 'text-transform': 'capitalize', display: 'inline-block' }
+                            }
+                        ],
+                    },
+                ],
+                fontsize_formats: fontSizes.trim(),
+                relative_urls: false,
+                remove_script_host: false,
+                convert_urls: false,
+                browser_spellcheck: true,
+                fix_list_elements: false,
+                entities: '38, amp, 60, lt, 62, gt',
+                entity_encoding: 'raw' ,
+                keep_styles: true,
+                paste_webkit_styles: 'font-weight font-style color',
+                preview_styles: 'font-family font-size font-weight font-style text-decoration text-transform',
+                tabfocus_elements: ': prev ,: next',
+                plugins: 'hr, media, paste, tabfocus, textcolor, fullscreen, wordpress, wpeditimage, wpgallery, wplink, wpdialogs, wpview, lists, colorpicker',
+                resize: 'vertical' ,
+                menubar: false,
+                indent: false,
+                toolbar1: 'forecolor backcolor, bold, italic, underline, strikethrough, subscript, superscript, removeformat, numlist, bullist, alignleft, aligncenter, alignjustify, alignright, link, unlink, hr, blockquote, fontsizeselect, styleselect',
+                body_class: 'id post-type-post-status-publish post-format-standard' ,
+                wpeditimage_disable_captions: false,
+                wpeditimage_html5_captions: true,
             
-                    $input.addClass('editor-initialized');
+            },
+            quicktags: {
+                buttons: 'strong,em,link,close',
+            },
+            mediaButtons: true,
+        };
 
-                    /*var div_editor =*/ $('<div id="' + id_div + '" class="ckeditor_inline ckeditor_inline_input_text" contenteditable="true" >' + $input.val() + '</div>')
+        if(fonts.length > 0) {
+            var imports = '';
+            editorSettings.tinymce.font_formats = '';
+
+            for(var i = 0; i < fonts.length; i++) {
+                editorSettings.tinymce.font_formats += `${fonts[i]}=${fonts[i].toLowerCase()};`;
+                imports += `${i > 0 ? '&' : ''}family=${fonts[i]}:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900`;
+            }
+            
+            editorSettings.tinymce.content_style = `@import url('https://fonts.googleapis.com/css2?${imports}&display=swap'); body { font-family: '${fonts[0]}'; }`;
+        }
+        if(fonts.length > 1)
+            editorSettings.tinymce.toolbar1 = editorSettings.tinymce.toolbar1.replace('fontsizeselect,', 'fontsizeselect, fontselect');
+    }
+
+    model.setEditorInline = function($layout) { 
+        $layout.find('textarea:not(.editor-initialized):not(.widgets-acf-editor):not([readonly="readonly"]), input[type="text"]:not(.wp-color-picker):not(.widgets-acf-flexible-control-title):not(.editor-initialized):not([readonly="readonly"])').each(function(index) {
+            if(!$(this).closest('.acf-color-picker')[0] && !$(this).closest('.acf-clone')[0] && $(this).parents('.acf-relationship').length === 0 && $(this).parents('[data-name="class"]').length === 0 && $(this).parents('.no-inline-editor').length === 0) {
+                var $input = $(this);
+                $input.addClass('editor-initialized');
+                $input.parent('.acf-input-wrap').css('overflow', 'visible');
+                var $preview = $('<div class="widgets-acf-preview">' + $input.val() + '</div>');
+                $preview.appendTo($input.parent());
+
+                $preview.one('click', () => {
+                    $preview.remove();
+                    var id_div = new Date().getTime();
+                    var isTextInput = $input.attr('type') == 'text';
+                    var currentEditorSettings = $.extend(true, {}, editorSettings);
+
+                    $('<textarea id="' + id_div + '" class="widgets-acf-editor ckeditor_inline ckeditor_inline_input_text">' + $input.val() + '</textarea>')
                         .appendTo($input.parent());
 
-                    // div_editor.one('click', function() {
-                    var editor;
+                    if(isTextInput) {
+                        currentEditorSettings.mediaButtons = false;
+                        currentEditorSettings.tinymce.toolbar1 = currentEditorSettings.tinymce.toolbar1.replace('numlist, bullist, ', '');
+                        currentEditorSettings.tinymce.toolbar1 = currentEditorSettings.tinymce.toolbar1.replace('hr, blockquote, ', '');
+                    }
 
-                    CKEDITOR.disableAutoInline = true;
-                    CKEDITOR.config.allowedContent = true;
-                    CKEDITOR.config.line_height = '0.1;0.2;0.3;0.4;0.5;0.6;0.7;0.8;0.9;1;1.1;1.2;1.3;1.4;1.5;1.6;1.7;1.8;1.9;2';
-
-                    // CKEDITOR.config.allowedContent = {
-                    //     $1: {
-                    //         // Use the ability to specify elements as an object.
-                    //         elements: CKEDITOR.dtd,
-                    //         attributes: true,
-                    //         styles: true,
-                    //         classes: true
-                    //     }
-                    // };
-                    // CKEDITOR.config.disallowedContent = 'font;';
-
-                    editor = CKEDITOR.inline(id_div, {
-                        enterMode: CKEDITOR.ENTER_BR,
-                        autoParagraph: true,
-                        forcePasteAsPlainText: true,
-                        font_names: fonts,
-                        fontSize_sizes: fontSizes,
-                        toolbarGroups: isTextInput ? toolbarText : toolbarTextArea,
-                        stylesSet: stylesSet,
-                    });
-
-                    editor.on('change', function() {
-                        $input.val(editor.getData());
-                    });
-                }
-            });
-        // }, 200);
+                    wp.editor.initialize(id_div, currentEditorSettings);
+                    setTimeout(() => $input.parents('.acf-field').first().css('min-height', 'auto'), 100);
+                    
+                    window.send_to_editor = function(html) {
+                        tinyMCE.activeEditor.execCommand('mceInsertContent', false, html);
+                    };
+                });
+            }
+        });
     };
+
+    $(document).on('tinymce-editor-setup', function(event, editor) {
+        var $element = $(editor.targetElm);
+
+        if(!$element.hasClass('widgets-acf-editor'))
+            return;
+
+        var $originalElement = $element.parents('.wp-editor-wrap').first().prev();
+
+        editor.on('init', () =>editor.focus());
+        editor.on('change input', () => $originalElement.val(editor.getContent()));
+        editor.on('blur', () => $element.parent().find('.mce-top-part').hide());
+        editor.on('focus', () => $element.parent().find('.mce-top-part').show());
+    });
 
     model.modalSettings = function(e) {
         var $el = $(e.currentTarget);
@@ -650,71 +737,25 @@
             }
         };
 
-        var fonts_selected = '';
+        $.ajax(settings_ajax)
+            .done(function(resposta) {
+                if(resposta.length == 0)
+                    return;
 
-        jQuery.ajax(settings_ajax).done(function(resposta) {
-            if(resposta.length != 0) {
                 for(var i = 0; i < resposta['fonte'].length; i++)
-                    fonts_selected = resposta['fonte'][i] + ';' + fonts_selected;
-    
-                for(var w = 0; w < resposta['weights'].length; w++) {
-                    var w_k = 0;
+                    fonts.push(resposta['fonte'][i]);
 
-                    for(var key_w in resposta['weights'][w]) {
-                        jQuery('body').append('<input type="hidden" id="fontsweight_selected_widget_acf_' + key_w + '" value="' + resposta['weights'][w][key_w] + '" />');
-                        w_k++;
-                    }
-                }
-        
-                if(!resposta['fonte'])
-                    fonts_selected = 'Arial;';
-        
-                jQuery('body').append('<input type="hidden" id="fonts_selected_widget_acf" value="' + fonts_selected + '" />');
-        
-                var all_fonts = fonts.split(';');
-        
-                for(var i = 0; i < all_fonts.length - 1; i++) {
-                    var name_hidden_variant = jQuery('#fontsweight_selected_widget_acf_' + fonts[i].replace(' ', '_')).val();
-                    var weight_fonts = name_hidden_variant.split(';');
-                    var styles_weight = [];
-                    var names = {
-                        '100':'Thin 100',
-                        '100italic':'Thin 100 Italic',
-                        '200':'Thin 200',
-                        '200italic':'Thin 200 Italic',
-                        '300':'Thin 300',
-                        '300italic':'Thin 300 Italic',
-                        'regular':'Regular',
-                        'italic':'Italic',
-                        '400':'Regular 400',
-                        '400italic':'Regular 400 Italic',
-                        '500':'Medium 500',
-                        '500italic':'Medium 500 Italic',
-                        '600':'Semi-bold 600',
-                        '600italic':'Semi-bold 600 Italic',
-                        '700':'Bold 700',
-                        '700italic':'Bold 700 Italic',
-                        '800':'Bold 800',
-                        '800italic':'Bold 800 Italic',
-                        '900':'Bold 900',
-                        '900italic':'Bold 900 Italic',
-                    };
-        
-                    for(var w = 0; w < weight_fonts.length; w++) {
-                        styles_weight.push({
-                            name: names[weight_fonts[w]],
-                            element: 'font',
-                            styles: {
-                                'font-weight': weight_fonts[w],
-                            },
-                        });
-                    }
-            
-                    if(styles_weight)
-                        CKEDITOR.stylesSet.add('my_styles_' + all_fonts[i].replace(' ', '_'), styles_weight);
-                }
-            }
-        });
+                model.setEditorSettings();
+
+            // for(var w = 0; w < resposta['weights'].length; w++) {
+            //     var w_k = 0;
+
+            //     for(var key_w in resposta['weights'][w]) {
+            //         jQuery('body').append('<input type="hidden" id="fontsweight_selected_widget_acf_' + key_w + '" value="' + resposta['weights'][w][key_w] + '" />');
+            //         w_k++;
+            //     }
+            // }
+            });
     };
 
     model.search = function(el) {
@@ -885,4 +926,9 @@
     $(document).on('mouseleave', '.grid-widget-settings', function() {
         model.layoutMouseOut(null, $(this));
     });
+
+    $(document).ready(() => {
+        if($('#acf-group_widgets_acf').length)
+            $('#postdivrich').hide();
+    })
 })(jQuery);

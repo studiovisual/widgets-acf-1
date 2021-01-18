@@ -546,8 +546,10 @@ Class Utils {
 
 			if(!empty($field_object)) {
 				$final[$field_object['name']] = $field;
-				
-				if(is_array($final[$field_object['name']]))
+
+				if(is_string($final[$field_object['name']]))
+					$final[$field_object['name']] = do_shortcode($final[$field_object['name']]);
+				elseif(is_array($final[$field_object['name']]))
 					$final[$field_object['name']] = self::parseFields($final[$field_object['name']]);
 			}
 			else {
