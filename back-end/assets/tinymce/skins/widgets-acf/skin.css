@@ -1214,7 +1214,7 @@ body .mce-abs-layout-item,
 .mce-btn .mce-txt {
 	font-size: inherit;
 	line-height: inherit;
-	color: inherit
+	color: #f7f7f7 !important;
 }
 
 .mce-btn-large button {
@@ -2962,10 +2962,10 @@ i.mce-i-backcolor {
 	display: none !important;
 }
 
-.mce-top-part {
+/* .mce-top-part {
 	position: absolute;
 	top: 100%;
-}
+} */
 
 .mce-statusbar {
 	background-color: #b3b3b3 !important;
@@ -2973,4 +2973,13 @@ i.mce-i-backcolor {
 
 .mce-btn:not(.mce-splitbtn) button {
 	padding: 4px 3px;
+}
+
+div.mce-inline-toolbar-grp.mce-arrow-up::before,
+div.mce-inline-toolbar-grp.mce-arrow-up::after {
+	border-bottom-color: #252525 !important;
+}
+
+div.wp-link-preview a {
+	color: #4ec6ff !important;
 }

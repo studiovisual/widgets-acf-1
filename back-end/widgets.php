@@ -32,8 +32,12 @@ Class Widgets {
 		if(is_admin()):
 			session_start();
 
-			if(!empty($_GET['post']) && get_post_type() == 'widget-reusable')
+			$include = false;
+
+			if(!empty($_GET['post']) && get_post_type() == 'widget-reusable'):
 				$_SESSION['session_' . $_GET['post']] = true;
+				$include = true;
+			endif;
 
 			// Define widget em post_type selecionados
 			if(!empty($widget_adm['post_type']) && !empty($_GET['post'])):
@@ -48,6 +52,8 @@ Class Widgets {
 
 					if(!empty($_GET['post']))
 						$_SESSION['session_' . $_GET['post']] = true;
+
+					$include = true;
 				endif;
 			endif;
 
@@ -61,6 +67,7 @@ Class Widgets {
 					);
 
 					$_SESSION['session_' . $_GET['post']] = true;
+					$include = true;
 				endif;
 			endif;
 
@@ -76,6 +83,7 @@ Class Widgets {
 					);
 
 					$_SESSION['session_' . $_GET['post']] = true;
+					$include = true;
 				endif;
 			endif;
 
@@ -90,6 +98,7 @@ Class Widgets {
 
 					$term = get_term($_GET['tag_ID'], $_GET['taxonomy']);
 					wp_update_term($_GET['tag_ID'], $_GET['taxonomy'], array('name' => $term->name, 'description' => '[acf_widgets id="' . $_GET['tag_ID'] . '" taxonomy="' . $_GET['taxonomy'] . '"]'));
+					$include = true;
 				endif;
 			endif;
 		endif;
@@ -102,6 +111,9 @@ Class Widgets {
 		endforeach;
 
 		acf_add_local_field_group($acf_base);
+
+		if($include)
+			wp_enqueue_style('widgets-editor-skin-css', plugins_url('assets/tinymce/skins/widgets-acf/skin.min.css', __FILE__));
 	}
 
 	public function sortWidgets($a, $b) {

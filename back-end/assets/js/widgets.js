@@ -538,8 +538,8 @@
             tinymce: {
                 wpautop: false,
                 forced_root_block: '',
-                skin: 'widgets-acf',
-                skin_url: `${domain.origin}/wp-content/plugins/widgets-acf/back-end/assets/tinymce/skins/widgets-acf`,
+                // skin: 'widgets-acf',
+                // skin_url: `${domain.origin}/wp-content/plugins/widgets-acf/back-end/assets/tinymce/skins/widgets-acf`,
                 formats: {
                     alignleft: [
                         {selector: 'p, h1, h2, h3, h4, h5, h6, td, th, div, ul, ol, li, span', inline: 'span', block: 'span', styles: {display: 'block', textAlign: 'left' }},
@@ -609,7 +609,7 @@
                 body_class: 'id post-type-post-status-publish post-format-standard' ,
                 wpeditimage_disable_captions: false,
                 wpeditimage_html5_captions: true,
-            
+                content_style: 'body { background-color: #b3b3b3; color: #000000; text-shadow: 1px 2px 3px #666; }',
             },
             quicktags: {
                 buttons: 'strong,em,link,close',
@@ -626,7 +626,7 @@
                 imports += `${i > 0 ? '&' : ''}family=${fonts[i]}:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900`;
             }
             
-            editorSettings.tinymce.content_style = `@import url('https://fonts.googleapis.com/css2?${imports}&display=swap'); body { font-family: '${fonts[0]}'; }`;
+            editorSettings.tinymce.content_style += `@import url('https://fonts.googleapis.com/css2?${imports}&display=swap'); body { font-family: '${fonts[0]}'; }`;
         }
         if(fonts.length > 1)
             editorSettings.tinymce.toolbar1 = editorSettings.tinymce.toolbar1.replace('fontsizeselect,', 'fontsizeselect, fontselect');
@@ -641,14 +641,16 @@
                 var $preview = $('<div class="widgets-acf-preview">' + $input.val() + '</div>');
                 $preview.appendTo($input.parent());
 
+                $preview.find('a').on('click', (event) => event.preventDefault());
                 $preview.one('click', () => {
                     $preview.remove();
                     var id_div = new Date().getTime();
                     var isTextInput = $input.attr('type') == 'text';
                     var currentEditorSettings = $.extend(true, {}, editorSettings);
 
-                    $('<textarea id="' + id_div + '" class="widgets-acf-editor ckeditor_inline ckeditor_inline_input_text">' + $input.val() + '</textarea>')
-                        .appendTo($input.parent());
+                    var $editor = $('<textarea id="' + id_div + '" class="widgets-acf-editor ckeditor_inline ckeditor_inline_input_text">' + $input.val() + '</textarea>');
+                    $editor.appendTo($input.parent());
+                    $editor.on('input paste', () => $input.val($editor.val()));
 
                     if(isTextInput) {
                         currentEditorSettings.mediaButtons = false;
@@ -677,8 +679,8 @@
 
         editor.on('init', () =>editor.focus());
         editor.on('change input', () => $originalElement.val(editor.getContent()));
-        editor.on('blur', () => $element.parent().find('.mce-top-part').hide());
-        editor.on('focus', () => $element.parent().find('.mce-top-part').show());
+        // editor.on('blur', () => $element.parent().find('.mce-top-part').hide());
+        // editor.on('focus', () => $element.parent().find('.mce-top-part').show());
     });
 
     model.modalSettings = function(e) {
