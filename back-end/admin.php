@@ -63,7 +63,7 @@ Class Admin {
 					
 					$handle = opendir($path);
 					closedir($handle);
-					rmdir($path);
+					rmdir(realpath($path));
 					
 					echo '<script>alert("Widget deletado com sucesso!");window.location="'.admin_url('admin.php?page=acf-options-todos-os-widgets').'";</script>';
 					die();
@@ -173,7 +173,7 @@ Class Admin {
 				
 				// name
 				$name = $widget['field_name_'.$key];
-				rename($dir_widget, $path.'/'.sanitize_title($name) );
+				rename(realpath($dir_widget), realpath($path.'/'.sanitize_title($name)) );
 				
 				$alert = 'Widgets atualizados com sucesso!';
 				
@@ -185,7 +185,7 @@ Class Admin {
 	}
 	
 	public function writeWidget($file, $text) {
-		$fp = fopen($file, 'w');
+		$fp = fopen(realpath($file), 'w');
 		fwrite($fp, $text );
 		fclose($fp);
 	}
