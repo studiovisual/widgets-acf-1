@@ -319,43 +319,50 @@ Class Utils {
 		$html = '';
 		$css_widgets = '';
 		global $js_widgets;
-		
+	
 		foreach($layout_content as $layout):
 			$style_attr = array();
 			$style_bg = array();
-
+	
+			$class_setting = 'layout';
+	
 			if(!empty($layout['attr']['layout_padding']['layout_padding_top']))
 				$style_attr['padding_top'] = 'padding-top: ' . $layout['attr']['layout_padding']['layout_padding_top'] . 'px;';
-
+	
 			if(!empty($layout['attr']['layout_padding']['layout_padding_right']))
 				$style_attr['padding_right'] = 'padding-right: ' . $layout['attr']['layout_padding']['layout_padding_right'] . 'px;';
-
+	
 			if(!empty($layout['attr']['layout_padding']['layout_padding_bottom']))
 				$style_attr['padding_bottom'] = 'padding-bottom: ' . $layout['attr']['layout_padding']['layout_padding_bottom'] . 'px;';
-
+	
 			if(!empty($layout['attr']['layout_padding']['layout_padding_left']))
 				$style_attr['padding_left'] = 'padding-left: ' . $layout['attr']['layout_padding']['layout_padding_left'] . 'px;';
-
-			if($layout['attr']['layout_background'] == 'image' && !empty($layout['attr']['layout_background_image'])): 
+	
+			if($layout['attr']['layout_background'] == 'image' && !empty($layout['attr']['layout_background_image'])):
+				$class_setting .= ' layout--background-image';
 				$img_bg = wp_get_attachment_url($layout['attr']['layout_background_image']);
-
-				$style_bg['layout_background_image'] = 'background-image: url(' . $img_bg . ');';
-				$style_bg['background_size'] = 'background-size: cover;';
-				$style_bg['background_repeat'] = 'background-repeat: no-repeat;';
-				$style_bg['background_position'] = 'background-position: center center;';
+	
+				$style_bg['layout_background_image'] = apply_filters('widgetsacf_layout_background_image', 'background-image: url(' . $img_bg . ');', $img_bg);
+	
+				$style_bg['background_size'] = apply_filters('widgetsacf_layout_background_image_size', 'background-size: cover;');
+				$style_bg['background_repeat'] = apply_filters('widgetsacf_layout_background_image_repeat', 'background-repeat: no-repeat;');
+				$style_bg['background_position'] = apply_filters('widgetsacf_layout_background_image_position', 'background-position: center center;');
 			endif;
-
-			if($layout['attr']['layout_background'] == 'color' && !empty($layout['attr']['layout_background_color']))
+	
+			if($layout['attr']['layout_background'] == 'color' && !empty($layout['attr']['layout_background_color'])):
+				$class_setting .= ' layout--background-color';
+	
 				$style_bg['layout_background_color'] = 'background-color: ' . $layout['attr']['layout_background_color'] . ';';
-
-			$class_setting = $layout['attr']['layout_id_class']['layout_class'];
+			endif;
+	
+			$class_setting .= !empty($layout['attr']['layout_id_class']['layout_class']) ? ' ' . $layout['attr']['layout_id_class']['layout_class'] : '';
 			$id_setting = trim($layout['attr']['layout_id_class']['layout_id']);
-			
+	
 			$class_setting .= empty($layout['attr']['layout_display_mobile']) ? ' d-none' : ' d-flex';
 			$class_setting .= empty($layout['attr']['layout_display_tablet']) ? ' d-md-none' : ' d-md-flex';
 			$class_setting .= empty($layout['attr']['layout_display_desktop']) ? ' d-lg-none' : ' d-lg-flex';
 			$class_setting = trim($class_setting);
-			
+	
 			$html .= "<section";
 			if(!empty($id_setting))
 				$html .= " id=\"{$id_setting}\"";
@@ -363,144 +370,146 @@ Class Utils {
 				$html .= " class=\"{$class_setting}\"";
 			if(!empty($style_bg) || !empty($style_attr) || !empty($layout['attr']['layout_custom_css']))
 				$html .= " style=\"" . implode(' ', $style_bg) . ' ' . implode(' ', $style_attr) . $layout['attr']['layout_custom_css'] . "\"";
-			
+	
 			$html .= ">";
-			
+	
+			$html = apply_filters('widgetsacf_layout_before_content', $html, $layout);
+	
 			if($layout['attr']['layout_width'] == 'container')
 				$html .= '<div class="container">';
 			else
 				$html .= '<div class="container-fluid px-0">';
-
+	
 			$align = ' align-items-' . $layout['attr']['layout_align']['layout_align_vertical'];
 			$align .= ' justify-content-' . $layout['attr']['layout_align']['layout_align_horizontal'];
-			
+	
 			$html .= '<div class="row' . $align . ($layout['attr']['layout_width'] != 'container' ? ' mx-0' : '') .'">';
-			
+	
 			$count_column = 0;
-			
+	
 			foreach($layout as $w_content):
 				if(!array_key_exists('content', $w_content))
 					continue;
-				
+	
 				$layout_widget = str_replace('_widget_acf', '', $w_content['layout']);
 				$widget_name = str_replace('_', '-', $layout_widget);
 				$dir_widget = get_template_directory() . "/widgets-templates/{$widget_name}";
 				$url_widget = get_template_directory_uri() . "/widgets-templates/{$widget_name}";
 				$plugin_widget = false;
-				
+	
 				if(function_exists('\App\template') || function_exists('\Roots\view')):
 					$dir_widget = get_template_directory() . "/views/widgets-templates/{$widget_name}";
 					$url_widget = get_template_directory_uri() . "/views/widgets-templates/{$widget_name}";
 				endif;
-				
+	
 				if(!is_dir($dir_widget)):
 					$dir_widget = plugin_dir_path(__FILE__) . "../widgets-templates/{$widget_name}";
 					$plugin_widget = true;
 				endif;
-				
+	
 				$files = glob("{$dir_widget}/index.*");
-				
+	
 				if(empty($files))
 					continue;
-				
+	
 				$columns = $w_content['content']['field_grid_columns_mobile_' . $layout_widget . '_widget_acf_key'];
 				$columns .= ' ' . $w_content['content']['field_grid_columns_tablet_' . $layout_widget . '_widget_acf_key'];
 				$columns .= ' ' . $w_content['content']['field_grid_columns_desktop_' . $layout_widget . '_widget_acf_key'];
 				$style = '';
 				$margin_top = $w_content['content']['margin_' . $layout_widget . '_widget_acf_key']['margin_top'];
 				$margin_bottom = $w_content['content']['margin_' . $layout_widget . '_widget_acf_key']['margin_bottom'];
-
+	
 				if(!empty($margin_top))
 					$style .= "margin-top: {$margin_top}px;";
 				if(!empty($margin_bottom))
 					$style .= "margin-bottom: {$margin_bottom}px;";
-
+	
 				if(!empty($style))
 					$style = "style=\"{$style}\"";
-				
+	
 				$html .= sprintf(
-					"<div class=\"widget-acf {$widget_name} {$columns}%s\"%s>", 
-					empty($w_content['class']) ? "" : " " . $w_content['class'], 
+					"<div class=\"widget-acf {$widget_name} {$columns}%s\"%s>",
+					empty($w_content['class']) ? "" : " " . $w_content['class'],
 					empty($style) ? "" : " " . $style
 				);
-				
+	
 				ob_start();
-				
+	
 				$fields = $w_content['content'];
 				global $widget;
 				$widget = new stdClass();
 				$widget->fields = self::parseFields($fields);
-
+	
 				$widget->layout = $layout['attr'];
 				foreach($widget->layout as $key => $layout_attr):
 					$widget->layout[str_replace('layout_', '', $key)] = $layout_attr;
 					unset($widget->layout[$key]);
 				endforeach;
-
+	
 				$widget = apply_filters("widgetsacf_{$widget_name}_data", $widget);
-				
+	
 				if(function_exists('\App\template') && !$plugin_widget):
 					$template = "widgets-templates.{$widget_name}.index";
-					
+	
 					echo \App\template($template, ['widget' => $widget]);
 				elseif(function_exists('\Roots\view') && !$plugin_widget):
 					$template = "widgets-templates.{$widget_name}.index";
-					
+	
 					echo \Roots\view($template, ['widget' => $widget]);
 				else:
 					include "{$files[0]}";
 				endif;
-					
+	
 				$html .= ob_get_clean();
 				$html .= '</div>';
-				
+	
 				$css_widgets .= self::enqueueStyle($dir_widget, $url_widget, $widget_name);
 				$js_widgets .= self::enqueueScript($dir_widget, $url_widget, $widget_name);
-
+	
 				$count_column++;
 			endforeach;
-				
+	
 			$html .= '</div>';
 			$html .= '</div>';
 			$html .= '</section>';
 		endforeach;
-			
+	
 		$url_widgets = get_template_directory();
-
-        if(get_field('widgets_acf_enquee_css', 'options')):
-            // css widgets
-            require  plugin_dir_path(__FILE__) . "../scssphp/scss.inc.php";
-            $scss = new scssc();
-            $scss->setFormatter("scss_formatter_compressed");
-            $css_widgets = $scss->compile($css_widgets);
-            $dir_css_widget = $url_widgets . '/widgets_acf.css';
-            $fp = fopen($dir_css_widget, 'w');
-            fwrite($fp, $css_widgets);
-            fclose($fp);
-
-            // Enqueue style
-            wp_enqueue_style("widget/widgets_acf", get_template_directory_uri() . '/widgets_acf.css', array(), false, 'all');
-        endif;
-
+	
+		if(get_field('widgets_acf_enquee_css', 'options')):
+			// css widgets
+			require  plugin_dir_path(__FILE__) . "../scssphp/scss.inc.php";
+			$scss = new scssc();
+			$scss->setFormatter("scss_formatter_compressed");
+			$css_widgets = $scss->compile($css_widgets);
+			$dir_css_widget = $url_widgets . '/widgets_acf.css';
+			$fp = fopen($dir_css_widget, 'w');
+			fwrite($fp, $css_widgets);
+			fclose($fp);
+	
+			// Enqueue style
+			wp_enqueue_style("widget/widgets_acf", get_template_directory_uri() . '/widgets_acf.css', array(), false, 'all');
+		endif;
+	
 		if(get_field('widgets_acf_enquee_js', 'options')):
-            // js widgets
-            require_once(plugin_dir_path(__FILE__) . '../JShrink/Minifier.php');
+			// js widgets
+			require_once(plugin_dir_path(__FILE__) . '../JShrink/Minifier.php');
 			$js_widgets = \JShrink\Minifier::minify($js_widgets);
-
+	
 			$dir_js_widget = $url_widgets . '/widgets_acf.js';
 	
 			if(wp_script_is('widget/widgets_acf')):
 				wp_dequeue_script('widget/widgets_acf');
 			endif;
 	
-    		$fp = fopen($dir_js_widget, 'w');        
-            fwrite($fp, $js_widgets);
+			$fp = fopen($dir_js_widget, 'w');
+			fwrite($fp, $js_widgets);
 			fclose($fp);
-
-            // Enqueue script
+	
+			// Enqueue script
 			wp_enqueue_script("widget/widgets_acf", get_template_directory_uri() . '/widgets_acf.js', array(), false, true);
-        endif;
-
+		endif;
+	
 		return $html;
 	}
 
