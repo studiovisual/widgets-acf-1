@@ -3,7 +3,7 @@
 Plugin Name:  Widgets ACF
 Plugin URI:   https://github.com/claudioweb/widgets-acf
 Description:  Plugin dependente do ACF (Add Custom Fields)
-Version:      2.0
+Version:      2.1.0
 Author:       Claudio Web (claudioweb)
 Author URI:   http://www.claudioweb.com.br/
 Text Domain:  widgets-acf
