@@ -112,7 +112,7 @@ Class Widgets {
 
 		acf_add_local_field_group($acf_base);
 
-		if($include)
+		if(isset($include) && $include)
 			wp_enqueue_style('widgets-editor-skin-css', plugins_url('assets/tinymce/skins/widgets-acf/skin.min.css', __FILE__));
 	}
 
